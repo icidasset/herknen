@@ -1,8 +1,7 @@
 # The Prosperity Public License 3.0.0
 
-Contributor: $name
-
-Source Code: $address
+Contributor: Steven Vandevelde
+Source Code: rad:git:hwd1yrefscrrerbuifh6b54ccissxa9swihno1ux4k3e761rydsdtwacuxc
 
 ## Purpose
 
