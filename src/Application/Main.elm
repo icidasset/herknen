@@ -2,8 +2,14 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation
+import Css.Classes as C
+import Group exposing (Group)
 import Html exposing (Html)
+import Html.Attributes as A
+import Material.Icons
 import Radix exposing (..)
+import Theme
+import Unit exposing (Unit)
 import Url exposing (Url)
 
 
@@ -29,9 +35,21 @@ main =
 
 init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init _ _ _ =
-    ( {}
-    , Cmd.none
-    )
+    Tuple.pair
+        { groups =
+            [ { icon = Group.iconFromString "assignments"
+              , label = "Grocery List"
+              , units =
+                    []
+              }
+            , { icon = Group.iconFromString "assignments"
+              , label = "To do"
+              , units =
+                    []
+              }
+            ]
+        }
+        Cmd.none
 
 
 
@@ -61,5 +79,58 @@ subscriptions _ =
 view : Model -> Browser.Document Msg
 view model =
     { title = "Herknen"
-    , body = []
+    , body =
+        [ groupView model.groups
+        ]
     }
+
+
+groupView : List Group -> Html Msg
+groupView groups =
+    groups
+        |> List.indexedMap
+            (\idx group ->
+                Html.li
+                    [ idx
+                        |> Theme.itemForIndex Theme.default
+                        |> Theme.mergeClasses
+                        |> A.class
+
+                    --
+                    , C.border_b
+                    , C.border_opacity_5
+                    , C.border_black
+                    , C.px_4
+                    , C.py_3
+                    , C.tracking_wide
+
+                    --
+                    , C.last__border_0
+
+                    -- Responsive
+                    -------------
+                    , C.sm__first__rounded_t
+                    , C.sm__last__rounded_b
+                    ]
+                    [ Html.div
+                        [ C.pt_px ]
+                        [ Html.text group.label ]
+                    ]
+            )
+        |> Html.ol
+            [ Theme.default.container
+                |> Theme.mergeClasses
+                |> A.class
+
+            --
+            , C.max_w_xs
+            , C.w_full
+            ]
+
+
+unitView : Unit -> Html Msg
+unitView unit =
+    Html.div
+        []
+        [ Html.text unit.text
+        ]

@@ -9,8 +9,10 @@ in
     buildInputs = [
 
       # Dev Tools
+      pkgs.devd
       pkgs.just
       pkgs.mustache-go
+      pkgs.watchexec
 
       # Language Specific
       pkgs.elmPackages.elm

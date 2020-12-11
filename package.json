@@ -5,7 +5,7 @@
   "author": "Steven Vandevelde <icid.asset@gmail.com>",
   "type": "module",
   "devDependencies": {
-    "elm-tailwind-css": "^1.0.1"
+    "elm-tailwind-css": "^1.1.1"
   },
   "dependencies": {
     "tailwindcss": "^2.0.1"

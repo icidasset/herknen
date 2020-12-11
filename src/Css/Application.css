@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: "Heebo";
+  src: url("fonts/Heebo[wght].woff2") format("woff2-variations");
+  font-weight: 1 999;
+}
+
+
+body {
+  @apply bg-gray-50 font-body font-normal h-screen text-gray-900;
+  @apply dark:bg-gray-900 dark:text-gray-200;
+}
+
+
+@screen sm {
+  body { @apply flex items-center justify-center }
+}
