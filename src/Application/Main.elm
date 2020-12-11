@@ -6,7 +6,8 @@ import Css.Classes as C
 import Group exposing (Group)
 import Html exposing (Html)
 import Html.Attributes as A
-import Material.Icons
+import Material.Icons.Round as Icons
+import Material.Icons.Types exposing (Coloring(..))
 import Radix exposing (..)
 import Theme
 import Unit exposing (Unit)
@@ -80,7 +81,27 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Herknen"
     , body =
-        [ groupView model.groups
+        [ Html.div
+            [ C.flex
+            , C.flex_col
+            , C.items_center
+            , C.justify_center
+            , C.w_full
+            ]
+            [ groupView model.groups
+
+            --
+            , Html.div
+                [ C.flex
+                , C.items_center
+                , C.p_4
+                ]
+                [ Html.span
+                    [ C.mr_2 ]
+                    [ Icons.add 16 Inherit ]
+                , Html.text "Create list"
+                ]
+            ]
         ]
     }
 

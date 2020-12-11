@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://herknen.fission.app/schemas/Unit.json",
+  "title": "Unit",
+  "description": "A single item from a group",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "description": "The unix timestamp of when the unit was created",
+      "type": "number"
+    },
+    "modifiedAt": {
+      "description": "The unix timestamp of when the unit was modified",
+      "type": "number"
+    },
+    "notifyAt": {
+      "description": "An optional unix timestamp of when to send the user a notification of this unit",
+      "type": "number"
+    },
+    "text": {
+      "description": "The text content",
+      "type": "string"
+    }
+  },
+  "required": [ "createdAt", "modifiedAt", "text" ]
+}

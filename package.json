@@ -8,6 +8,7 @@
     "elm-tailwind-css": "^1.1.1"
   },
   "dependencies": {
-    "tailwindcss": "^2.0.1"
+    "tailwindcss": "^2.0.1",
+    "webnative": "^0.20.5"
   }
 }

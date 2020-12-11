@@ -1,4 +1,6 @@
 build
 elm-stuff
 node_modules
-src/Library/Css/Classes.elm
+
+# Generated Elm files to ignore
+src/Generated
