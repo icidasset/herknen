@@ -21,6 +21,7 @@ dist := "build"
 @elm-dev:
 	echo "🌳  Compiling Elm"
 	elm make \
+		--debug \
 		--output {{dist}}/application.js \
 		src/Application/Main.elm
 

@@ -19,6 +19,7 @@ type alias Flags =
 
 type alias Model =
     { groups : List Group
+    , newGroupLabel : Maybe String
     }
 
 
@@ -26,10 +27,12 @@ type alias Model =
 -- 📣
 
 
-type
-    Msg
-    -----------------------------------------
-    -- URL
-    -----------------------------------------
-    = UrlChanged Url
+type Msg
+    = EditGroup { label : String }
+    | FinishedEditingGroup { applyNewLabel : Bool, label : String }
+    | HoldOnToNewGroupLabel String
+      -----------------------------------------
+      -- URL
+      -----------------------------------------
+    | UrlChanged Url
     | UrlRequested UrlRequest

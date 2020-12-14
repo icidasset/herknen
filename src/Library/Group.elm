@@ -14,6 +14,11 @@ type alias Group =
     { icon : Icon
     , label : String
     , units : List Unit
+
+    -----------------------------------------
+    -- Internal
+    -----------------------------------------
+    , editing : Bool
     }
 
 

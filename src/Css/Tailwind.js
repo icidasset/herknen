@@ -30,7 +30,7 @@ export default {
 
     extend: {
       backgroundOpacity: [ "dark", "responsive" ],
-      borderWidth: [ "first", "last" ],
+      borderWidth: [  "first", "focus", "last" ],
       borderRadius: [ "first", "last", "responsive" ],
       textOpacity: [ "dark" ]
     }
