@@ -79,7 +79,7 @@ update msg model =
                             { group | editing = True }
 
                         else
-                            group
+                            { group | editing = False }
                     )
                 |> (\groups -> { model | groups = groups, newGroupLabel = Just label })
                 |> Return.singleton
