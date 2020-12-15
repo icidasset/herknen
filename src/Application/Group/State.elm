@@ -47,11 +47,11 @@ finishedEditing { index, save } model =
         |> adjustGroupWithIndex
             index
             (\g ->
-                if g.label == "" && not g.isNew then
+                if String.trim g.label == "" && not g.isNew then
                     { g | editing = False, label = g.oldLabel }
 
                 else
-                    { g | editing = False }
+                    { g | editing = False, label = String.trim g.label }
             )
         |> (\m ->
                 { m | groups = List.filter (.isNew >> not) m.groups }
@@ -69,7 +69,7 @@ finishedEditing { index, save } model =
 updateLabel : { index : Int } -> String -> Manager
 updateLabel { index } newLabel model =
     model
-        |> adjustGroupWithIndex index (\g -> { g | label = String.trim newLabel })
+        |> adjustGroupWithIndex index (\g -> { g | label = newLabel })
         |> Return.singleton
 
 
