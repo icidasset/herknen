@@ -32,6 +32,7 @@ export default {
       backgroundOpacity: [ "dark", "responsive" ],
       borderWidth: [  "first", "focus", "last" ],
       borderRadius: [ "first", "last", "responsive" ],
+      pointerEvents: [ "group-hover" ],
       textOpacity: [ "dark" ]
     }
 

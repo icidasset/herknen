@@ -66,10 +66,18 @@ finishedEditing { index, save } model =
             )
 
 
+remove : { index : Int } -> Manager
+remove { index } model =
+    model.groups
+        |> List.removeAt index
+        |> (\groups -> { model | groups = groups })
+        |> Return.singleton
+
+
 updateLabel : { index : Int } -> String -> Manager
 updateLabel { index } newLabel model =
     model
-        |> adjustGroupWithIndex index (\g -> { g | label = newLabel })
+        |> adjustGroupWithIndex index (\g -> { g | label = newLabel, isNew = False })
         |> Return.singleton
 
 

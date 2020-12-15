@@ -116,6 +116,9 @@ update msg =
         FinishedEditingGroup a ->
             Group.finishedEditing a
 
+        RemoveGroup a ->
+            Group.remove a
+
         UpdateGroupLabel a b ->
             Group.updateLabel a b
 
@@ -199,7 +202,9 @@ groupView groups =
                     , C.border_b
                     , C.border_opacity_5
                     , C.border_black
-                    , C.overflow_hidden
+                    , C.group
+                    , C.pt_px
+                    , C.relative
 
                     --
                     , if group.editing then
@@ -232,7 +237,6 @@ groupView groups =
                             --
                             , C.bg_transparent
                             , C.font_body
-                            , C.mt_px
                             , C.px_4
                             , C.py_3
                             , C.tracking_wide
@@ -245,8 +249,7 @@ groupView groups =
 
                       else
                         Html.div
-                            [ C.mt_px
-                            , C.px_4
+                            [ C.px_4
                             , C.py_3
                             , C.tracking_wide
                             ]
@@ -254,6 +257,29 @@ groupView groups =
                                 [ E.onClick editMsg ]
                                 [ Html.text group.label ]
                             ]
+
+                    --
+                    , Html.div
+                        [ E.onClick (RemoveGroup { index = idx })
+
+                        --
+                        , C.absolute
+                        , C.cursor_pointer
+                        , C.opacity_0
+                        , C.neg_translate_y_1over2
+                        , C.pointer_events_none
+                        , C.px_4
+                        , C.right_full
+                        , C.text_gray_400
+                        , C.top_1over2
+                        , C.transform
+
+                        --
+                        , C.group_hover__opacity_100
+                        , C.group_hover__pointer_events_auto
+                        ]
+                        [ Icons.remove 22 Inherit
+                        ]
                     ]
             )
         |> Html.ol

@@ -30,6 +30,7 @@ type Msg
     = CreateGroup
     | EditGroup { index : Int }
     | FinishedEditingGroup { index : Int, save : Bool }
+    | RemoveGroup { index : Int }
     | UpdateGroupLabel { index : Int } String
       -----------------------------------------
       -- URL
