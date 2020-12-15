@@ -1,4 +1,4 @@
-module Group exposing (Group, Icon, default, iconFromString, icons, materialIcon)
+module Group exposing (Group, Icon, default, iconFromString, icons, materialIcon, new)
 
 import Dict exposing (Dict)
 import Material.Icons.Round as Icons
@@ -19,11 +19,24 @@ type alias Group =
     -- Internal
     -----------------------------------------
     , editing : Bool
+    , isNew : Bool
     }
 
 
 type Icon
     = Icon String
+
+
+new : Group
+new =
+    { icon = default.icon
+    , label = ""
+    , units = []
+
+    --
+    , editing = True
+    , isNew = True
+    }
 
 
 icons : Dict String ( Icon, Material.Icon msg )

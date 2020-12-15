@@ -11,11 +11,13 @@ import Keyboard exposing (Key(..))
 import Keyboard.Events as Keyboard
 import Material.Icons.Round as Icons
 import Material.Icons.Types exposing (Coloring(..))
+import Ports
 import Radix exposing (..)
 import Return exposing (return)
 import Theme
 import Unit exposing (Unit)
 import Url exposing (Url)
+import Wnfs
 
 
 
@@ -48,7 +50,8 @@ init _ _ _ =
                     []
 
               --
-              , editing = True
+              , editing = False
+              , isNew = False
               }
             , { icon = Group.iconFromString "assignments"
               , label = "To do"
@@ -57,6 +60,34 @@ init _ _ _ =
 
               --
               , editing = False
+              , isNew = False
+              }
+            , { icon = Group.iconFromString "assignments"
+              , label = "A"
+              , units =
+                    []
+
+              --
+              , editing = False
+              , isNew = False
+              }
+            , { icon = Group.iconFromString "assignments"
+              , label = "B"
+              , units =
+                    []
+
+              --
+              , editing = False
+              , isNew = False
+              }
+            , { icon = Group.iconFromString "assignments"
+              , label = "C"
+              , units =
+                    []
+
+              --
+              , editing = False
+              , isNew = False
               }
             ]
         , newGroupLabel = Nothing
@@ -71,41 +102,51 @@ init _ _ _ =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        EditGroup { label } ->
+        CreateGroup ->
+            return
+                { model | groups = model.groups ++ [ Group.new ] }
+                (Ports.focusOnTextInput ())
+
+        EditGroup { index, label } ->
             model.groups
-                |> List.map
-                    (\group ->
-                        if group.label == label then
-                            { group | editing = True }
+                |> List.indexedMap
+                    (\groupIdx group ->
+                        if groupIdx == index then
+                            { group | editing = True, isNew = False }
 
                         else
-                            { group | editing = False }
+                            { group | editing = False, isNew = False }
                     )
-                |> (\groups -> { model | groups = groups, newGroupLabel = Just label })
+                |> (\groups ->
+                        { model | groups = groups, newGroupLabel = Just label }
+                   )
                 |> Return.singleton
+                |> Return.command (Ports.focusOnTextInput ())
 
-        FinishedEditingGroup { applyNewLabel, label } ->
+        FinishedEditingGroup { applyNewLabel, index } ->
             let
-                newLabel =
+                newLabel group =
                     case Maybe.map String.trim model.newGroupLabel of
                         Just "" ->
-                            label
+                            group.label
 
                         Nothing ->
-                            label
+                            group.label
 
                         Just l ->
                             l
             in
             model.groups
-                |> List.map
-                    (\group ->
-                        if group.label == label then
-                            { group | editing = False, label = newLabel }
+                |> List.indexedMap
+                    (\groupIdx group ->
+                        if groupIdx == index then
+                            { group | editing = False, isNew = False, label = newLabel group }
 
                         else
                             group
                     )
+                |> List.filter (.isNew >> (==) False)
+                |> List.filter (.label >> String.isEmpty >> not)
                 |> (\groups -> { model | groups = groups, newGroupLabel = Nothing })
                 |> Return.singleton
 
@@ -153,7 +194,11 @@ view model =
 
             --
             , Html.div
-                [ C.cursor_pointer
+                [ A.title "Create a new list"
+                , E.onClick CreateGroup
+
+                --
+                , C.cursor_pointer
                 , C.flex
                 , C.items_center
                 , C.p_4
@@ -174,10 +219,10 @@ groupView newGroupLabel groups =
             (\idx group ->
                 let
                     editMsg =
-                        EditGroup { label = group.label }
+                        EditGroup { index = idx, label = group.label }
 
                     finishedEditingMsg bool =
-                        FinishedEditingGroup { applyNewLabel = bool, label = group.label }
+                        FinishedEditingGroup { applyNewLabel = bool, index = idx }
                 in
                 Html.li
                     [ idx
@@ -192,6 +237,13 @@ groupView newGroupLabel groups =
                     , C.overflow_hidden
 
                     --
+                    , if group.editing then
+                        C.shadow_inner
+
+                      else
+                        C.shadow_none
+
+                    --
                     , C.last__border_0
 
                     -- Responsive
@@ -202,6 +254,10 @@ groupView newGroupLabel groups =
                     [ if group.editing then
                         Html.input
                             [ A.value (Maybe.withDefault group.label newGroupLabel)
+                            , A.autocomplete False
+                            , A.autofocus True
+                            , A.spellcheck False
+                            , A.type_ "text"
                             , E.onBlur (finishedEditingMsg True)
                             , E.onInput HoldOnToNewGroupLabel
                             , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg False ) ]
@@ -213,22 +269,24 @@ groupView newGroupLabel groups =
                             , C.px_4
                             , C.py_3
                             , C.tracking_wide
+                            , C.w_full
 
                             --
                             , C.focus__outline_none
-                            , C.focus__shadow_inner
                             ]
                             []
 
                       else
                         Html.div
-                            [ E.onClick editMsg
-                            , C.mt_px
+                            [ C.mt_px
                             , C.px_4
                             , C.py_3
                             , C.tracking_wide
                             ]
-                            [ Html.text group.label ]
+                            [ Html.span
+                                [ E.onClick editMsg ]
+                                [ Html.text group.label ]
+                            ]
                     ]
             )
         |> Html.ol

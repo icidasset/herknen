@@ -28,8 +28,9 @@ type alias Model =
 
 
 type Msg
-    = EditGroup { label : String }
-    | FinishedEditingGroup { applyNewLabel : Bool, label : String }
+    = CreateGroup
+    | EditGroup { index : Int, label : String }
+    | FinishedEditingGroup { applyNewLabel : Bool, index : Int }
     | HoldOnToNewGroupLabel String
       -----------------------------------------
       -- URL
