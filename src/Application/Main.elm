@@ -4,6 +4,7 @@ import Browser
 import Browser.Navigation
 import Css.Classes as C
 import Group exposing (Group)
+import Group.State as Group
 import Html exposing (Html)
 import Html.Attributes as A
 import Html.Events as E
@@ -13,7 +14,7 @@ import Material.Icons.Round as Icons
 import Material.Icons.Types exposing (Coloring(..))
 import Ports
 import Radix exposing (..)
-import Return exposing (return)
+import Return
 import Theme
 import Unit exposing (Unit)
 import Url exposing (Url)
@@ -52,6 +53,7 @@ init _ _ _ =
               --
               , editing = False
               , isNew = False
+              , oldLabel = ""
               }
             , { icon = Group.iconFromString "assignments"
               , label = "To do"
@@ -61,6 +63,7 @@ init _ _ _ =
               --
               , editing = False
               , isNew = False
+              , oldLabel = ""
               }
             , { icon = Group.iconFromString "assignments"
               , label = "A"
@@ -70,6 +73,7 @@ init _ _ _ =
               --
               , editing = False
               , isNew = False
+              , oldLabel = ""
               }
             , { icon = Group.iconFromString "assignments"
               , label = "B"
@@ -79,6 +83,7 @@ init _ _ _ =
               --
               , editing = False
               , isNew = False
+              , oldLabel = ""
               }
             , { icon = Group.iconFromString "assignments"
               , label = "C"
@@ -88,9 +93,9 @@ init _ _ _ =
               --
               , editing = False
               , isNew = False
+              , oldLabel = ""
               }
             ]
-        , newGroupLabel = Nothing
         }
         Cmd.none
 
@@ -100,70 +105,30 @@ init _ _ _ =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update msg =
     case msg of
         CreateGroup ->
-            return
-                { model | groups = model.groups ++ [ Group.new ] }
-                (Ports.focusOnTextInput ())
+            Group.create
 
-        EditGroup { index, label } ->
-            model.groups
-                |> List.indexedMap
-                    (\groupIdx group ->
-                        if groupIdx == index then
-                            { group | editing = True, isNew = False }
+        EditGroup a ->
+            Group.edit a
 
-                        else
-                            { group | editing = False, isNew = False }
-                    )
-                |> (\groups ->
-                        { model | groups = groups, newGroupLabel = Just label }
-                   )
-                |> Return.singleton
-                |> Return.command (Ports.focusOnTextInput ())
+        FinishedEditingGroup a ->
+            Group.finishedEditing a
 
-        FinishedEditingGroup { applyNewLabel, index } ->
-            let
-                newLabel group =
-                    case Maybe.map String.trim model.newGroupLabel of
-                        Just "" ->
-                            group.label
+        UpdateGroupLabel a b ->
+            Group.updateLabel a b
 
-                        Nothing ->
-                            group.label
-
-                        Just l ->
-                            l
-            in
-            model.groups
-                |> List.indexedMap
-                    (\groupIdx group ->
-                        if groupIdx == index then
-                            { group | editing = False, isNew = False, label = newLabel group }
-
-                        else
-                            group
-                    )
-                |> List.filter (.isNew >> (==) False)
-                |> List.filter (.label >> String.isEmpty >> not)
-                |> (\groups -> { model | groups = groups, newGroupLabel = Nothing })
-                |> Return.singleton
-
-        HoldOnToNewGroupLabel newLabel ->
-            Return.singleton { model | newGroupLabel = Just newLabel }
-
-        UrlChanged url ->
+        -----------------------------------------
+        -- URL
+        -----------------------------------------
+        UrlChanged a ->
             -- TODO
-            ( model
-            , Cmd.none
-            )
+            Return.singleton
 
-        UrlRequested urlRequest ->
+        UrlRequested a ->
             -- TODO
-            ( model
-            , Cmd.none
-            )
+            Return.singleton
 
 
 
@@ -190,7 +155,7 @@ view model =
             , C.justify_center
             , C.w_full
             ]
-            [ groupView model.newGroupLabel model.groups
+            [ groupView model.groups
 
             --
             , Html.div
@@ -212,17 +177,17 @@ view model =
     }
 
 
-groupView : Maybe String -> List Group -> Html Msg
-groupView newGroupLabel groups =
+groupView : List Group -> Html Msg
+groupView groups =
     groups
         |> List.indexedMap
             (\idx group ->
                 let
                     editMsg =
-                        EditGroup { index = idx, label = group.label }
+                        EditGroup { index = idx }
 
                     finishedEditingMsg bool =
-                        FinishedEditingGroup { applyNewLabel = bool, index = idx }
+                        FinishedEditingGroup { index = idx, save = bool }
                 in
                 Html.li
                     [ idx
@@ -253,13 +218,15 @@ groupView newGroupLabel groups =
                     ]
                     [ if group.editing then
                         Html.input
-                            [ A.value (Maybe.withDefault group.label newGroupLabel)
+                            [ A.value group.label
                             , A.autocomplete False
                             , A.autofocus True
                             , A.spellcheck False
                             , A.type_ "text"
+
+                            --
                             , E.onBlur (finishedEditingMsg True)
-                            , E.onInput HoldOnToNewGroupLabel
+                            , E.onInput (UpdateGroupLabel { index = idx })
                             , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg False ) ]
 
                             --

@@ -19,7 +19,6 @@ type alias Flags =
 
 type alias Model =
     { groups : List Group
-    , newGroupLabel : Maybe String
     }
 
 
@@ -29,11 +28,15 @@ type alias Model =
 
 type Msg
     = CreateGroup
-    | EditGroup { index : Int, label : String }
-    | FinishedEditingGroup { applyNewLabel : Bool, index : Int }
-    | HoldOnToNewGroupLabel String
+    | EditGroup { index : Int }
+    | FinishedEditingGroup { index : Int, save : Bool }
+    | UpdateGroupLabel { index : Int } String
       -----------------------------------------
       -- URL
       -----------------------------------------
     | UrlChanged Url
     | UrlRequested UrlRequest
+
+
+type alias Manager =
+    Model -> ( Model, Cmd Msg )

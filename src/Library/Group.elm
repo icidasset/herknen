@@ -20,6 +20,7 @@ type alias Group =
     -----------------------------------------
     , editing : Bool
     , isNew : Bool
+    , oldLabel : String
     }
 
 
@@ -36,6 +37,7 @@ new =
     --
     , editing = True
     , isNew = True
+    , oldLabel = ""
     }
 
 
