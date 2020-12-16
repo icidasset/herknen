@@ -43,27 +43,36 @@ edit { index } model =
 
 finishedEditing : { index : Int, save : Bool } -> Manager
 finishedEditing { index, save } model =
-    model
-        |> adjustGroupWithIndex
-            index
-            (\g ->
-                if String.trim g.label == "" && not g.isNew then
-                    { g | editing = False, label = g.oldLabel }
+    model.groups
+        |> List.indexedFoldr
+            (\idx g ( acc, bool ) ->
+                if idx == index then
+                    if String.trim g.label == "" && not g.isNew then
+                        acc
+                            |> (::) { g | editing = False, label = g.oldLabel }
+                            |> (\a -> ( a, bool ))
+
+                    else
+                        let
+                            label =
+                                String.trim g.label
+                        in
+                        acc
+                            |> (if g.isNew then
+                                    identity
+
+                                else
+                                    (::) { g | editing = False, label = label }
+                               )
+                            |> (\a -> ( a, label /= g.oldLabel ))
 
                 else
-                    { g | editing = False, label = String.trim g.label }
+                    ( g :: acc, bool )
             )
-        |> (\m ->
-                { m | groups = List.filter (.isNew >> not) m.groups }
+            ( [], False )
+        |> (\( groups, labelChanged ) ->
+                Return.singleton { model | groups = groups }
            )
-        |> Return.singleton
-        |> Return.command
-            (if save then
-                Cmd.none
-
-             else
-                Cmd.none
-            )
 
 
 remove : { index : Int } -> Manager
