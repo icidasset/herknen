@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "tailwindcss": "^2.0.1",
-    "webnative": "^0.20.5"
+    "webnative": "^0.21.1"
   }
 }

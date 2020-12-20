@@ -77,6 +77,10 @@ dist := "build"
 	devd --quiet build --port=8003 --all
 
 
+@install-deps:
+	pnpm install
+
+
 @watch:
 	echo "👀  Watching for changes"
 	just watch-css & \

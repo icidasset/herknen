@@ -17,6 +17,11 @@ const PERMISSIONS = {
 }
 
 
+const app = Elm.Main.init({
+  flags: {}
+})
+
+
 wn.setup.debug({ enabled: true })
 
 
@@ -31,7 +36,7 @@ wn.setup.endpoints({
 // 🚀
 
 
-let app, fs
+let fs
 
 
 wn.initialise({ permissions: PERMISSIONS })
@@ -40,11 +45,6 @@ wn.initialise({ permissions: PERMISSIONS })
 
     fs = state.fs
 
-    // Initialize app
-    app = Elm.Main.init({
-      flags: { authenticated }
-    })
-
     // Ports
     app.ports.focusOnTextInput.subscribe(() => {
       setTimeout(focusOnTextInput, 0)
@@ -52,10 +52,16 @@ wn.initialise({ permissions: PERMISSIONS })
       setTimeout(focusOnTextInput, 250)
     })
 
-    // app.ports.wnfsRequest.subscribe(async request => {
-    //   const result = await fs[request.method](...request.arguments)
-    //   app.ports.wnfsResponse.send(result)
-    // })
+    app.ports.wnfsRequest.subscribe(async request => {
+      if (request.method === "write") request.arguments = [Uint8Array.from(request.arguments[0])]
+      const data = await fs[request.method](request.path, ...request.arguments)
+      app.ports.wnfsResponse.send({ tag: request.tag, method: request.method, path: request.path, data: data.root ? null : data })
+    })
+
+    // Initialise, Pt. 2
+    app.ports.initialise.send({
+      authenticated
+    })
   })
 
 
