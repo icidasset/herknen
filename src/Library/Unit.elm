@@ -10,10 +10,15 @@ import Time
 
 
 type alias Unit =
-    -- createdAt : Time.Posix
-    -- modifiedAt : Time.Posix
-    -- notifyAt : Time.Posix
-    { text : String
+    { label : String
+    , notifyAt : Maybe Time.Posix
+
+    -----------------------------------------
+    -- Internal
+    -----------------------------------------
+    , editing : Bool
+    , isNew : Bool
+    , oldLabel : String
     }
 
 
@@ -24,13 +29,22 @@ type alias Unit =
 decoder : Json.Decode.Decoder Unit
 decoder =
     Json.Decode.map
-        (\text ->
-            { text = text }
+        (\label ->
+            { label = label
+            , notifyAt = Nothing
+
+            -----------------------------------------
+            -- Internal
+            -----------------------------------------
+            , editing = False
+            , isNew = False
+            , oldLabel = label
+            }
         )
-        (Json.Decode.field "text" Json.Decode.string)
+        (Json.Decode.field "label" Json.Decode.string)
 
 
 encode : Unit -> Json.Value
 encode unit =
     Json.object
-        [ ( "text", Json.string unit.text ) ]
+        [ ( "label", Json.string unit.label ) ]

@@ -6,14 +6,16 @@ import Group exposing (Group)
 import Group.State as Group
 import Group.View as Group
 import Group.Wnfs
+import Html
 import Loaders
+import Other.State as Other
 import Ports
 import Radix exposing (..)
 import Return exposing (return)
-import Tag
+import Route
+import Unit.View as Unit
 import Url exposing (Url)
 import Welcome.View as Welcome
-import Wnfs
 
 
 
@@ -37,11 +39,14 @@ main =
 
 
 init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
-init _ _ _ =
+init _ url navKey =
     return
         { authenticated = False
         , isLoading = True
         , groups = []
+        , navKey = navKey
+        , route = Route.Index
+        , url = url
         }
         Cmd.none
 
@@ -68,6 +73,9 @@ initPartDeux { authenticated } model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg =
     case msg of
+        Bypass ->
+            Return.singleton
+
         Initialise a ->
             initPartDeux a
 
@@ -93,21 +101,13 @@ update msg =
         -- 🦉
         -----------------------------------------
         GotWnfsResponse a ->
-            case Wnfs.decodeResponse Tag.parse a of
-                Ok ( Tag.Group tag, artifact ) ->
-                    Group.Wnfs.manage tag artifact
-
-                _ ->
-                    -- TODO: Error handling
-                    Return.singleton
+            Other.gotWnfsResponse a
 
         UrlChanged a ->
-            -- TODO
-            Return.singleton
+            Other.urlChanged a
 
         UrlRequested a ->
-            -- TODO
-            Return.singleton
+            Other.urlRequested a
 
 
 
@@ -134,7 +134,20 @@ view model =
             Loaders.puff 32 "currentColor"
 
           else if model.authenticated then
-            Group.index model
+            case model.route of
+                Route.Index ->
+                    Group.index model
+
+                Route.Group _ (Just group) ->
+                    Unit.index group.units
+
+                Route.Group { label } _ ->
+                    -- TODO: Loading
+                    Html.text ("Loading " ++ label)
+
+                Route.NotFound ->
+                    -- TODO: Proper 404 page
+                    Html.text "404"
 
           else
             Welcome.view
