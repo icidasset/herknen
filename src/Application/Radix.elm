@@ -56,11 +56,11 @@ type Msg
       -----------------------------------------
       -- Unit
       -----------------------------------------
-      -- | CreateUnit
-      -- | EditUnit { index : Int }
-      -- | FinishedEditingUnit { index : Int, save : Bool }
-      -- | RemoveUnit { index : Int }
-      -- | UpdateUnitLabel { index : Int } String
+    | CreateUnit
+    | EditUnit { index : Int }
+    | FinishedEditingUnit { index : Int, save : Bool }
+    | RemoveUnit { index : Int }
+    | UpdateUnitLabel { index : Int } String
       -----------------------------------------
       -- 🦉
       -----------------------------------------

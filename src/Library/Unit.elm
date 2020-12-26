@@ -17,8 +17,24 @@ type alias Unit =
     -- Internal
     -----------------------------------------
     , editing : Bool
+    , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
+    }
+
+
+new : Unit
+new =
+    { label = ""
+    , notifyAt = Nothing
+
+    -----------------------------------------
+    -- Internal
+    -----------------------------------------
+    , editing = True
+    , isLoading = False
+    , isNew = True
+    , oldLabel = ""
     }
 
 
@@ -37,6 +53,7 @@ decoder =
             -- Internal
             -----------------------------------------
             , editing = False
+            , isLoading = False
             , isNew = False
             , oldLabel = label
             }

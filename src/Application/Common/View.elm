@@ -1,9 +1,11 @@
 module Common.View exposing (..)
 
+import Common.Item exposing (Item)
 import Css.Classes as C
 import Html exposing (Html)
 import Html.Attributes as A
 import Html.Events as E
+import Json.Decode as Decode
 import Keyboard exposing (Key(..))
 import Keyboard.Events as Keyboard
 import Material.Icons.Round as Icons
@@ -72,7 +74,7 @@ list =
         ]
 
 
-item : Messages msg -> List (Html.Attribute msg) -> Int -> { item | editing : Bool, label : String } -> Html msg
+item : Messages msg -> List (Html.Attribute msg) -> Int -> Item item -> Html msg
 item messages attributes idx it =
     let
         editMsg =
@@ -147,7 +149,18 @@ item messages attributes idx it =
                     attributes
                 )
                 [ Html.span
-                    [ E.onClick editMsg ]
+                    (if it.isLoading then
+                        []
+
+                     else
+                        [ { message = editMsg
+                          , stopPropagation = True
+                          , preventDefault = True
+                          }
+                            |> Decode.succeed
+                            |> E.custom "click"
+                        ]
+                    )
                     [ Html.text it.label ]
                 ]
 

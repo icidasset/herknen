@@ -36,8 +36,15 @@ urlChanged url model =
                     List.find
                         (.label >> (==) label)
                         model.groups
+
+                route =
+                    Route.Group
+                        { index = Nothing
+                        , label = label
+                        }
+                        maybeGroup
             in
-            Return.singleton { model | route = Route.Group { label = label } maybeGroup }
+            Return.singleton { model | route = route }
 
         route ->
             Return.singleton { model | route = route }

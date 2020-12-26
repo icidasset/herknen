@@ -15,12 +15,13 @@ type alias Config item =
     { new : Item item
     , getter : Model -> List (Item item)
     , setter : Model -> List (Item item) -> Model
+    , sorter : List (Item item) -> List (Item item)
 
     -- Commands
     -----------
-    , move : Item item -> Cmd Msg
-    , persist : Item item -> Cmd Msg
-    , remove : Item item -> Cmd Msg
+    , move : Model -> Item item -> Cmd Msg
+    , persist : Model -> Item item -> Cmd Msg
+    , remove : Model -> Item item -> Cmd Msg
     }
 
 
@@ -104,14 +105,14 @@ finishedEditing config { index, save } model =
             ( [], Nothing )
         |> (\( items, changedItem ) ->
                 return
-                    (config.setter model items)
+                    (config.setter model <| config.sorter items)
                     (case ( save, changedItem ) of
                         ( True, Just item ) ->
                             if item.oldLabel == "" then
-                                config.persist item
+                                config.persist model item
 
                             else
-                                config.move item
+                                config.move model item
 
                         _ ->
                             Cmd.none
@@ -137,7 +138,7 @@ remove config { index } model =
                     (config.setter model items)
                     (case maybeDeletedItem of
                         Just deletedItem ->
-                            config.remove deletedItem
+                            config.remove model deletedItem
 
                         Nothing ->
                             Cmd.none

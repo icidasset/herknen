@@ -53,9 +53,21 @@ wn.initialise({ permissions: PERMISSIONS })
     })
 
     app.ports.wnfsRequest.subscribe(async request => {
-      if (request.method === "write") request.arguments = [Uint8Array.from(request.arguments[0])]
-      const data = await fs[request.method](request.path, ...request.arguments)
-      app.ports.wnfsResponse.send({ tag: request.tag, method: request.method, path: request.path, data: data.root ? null : data })
+      if (request.method === "write") {
+        request.arguments = [Uint8Array.from(request.arguments[0])]
+      }
+
+      const data = await fs[request.method.replace(/_utf8$/, "")](
+        request.path,
+        ...request.arguments
+      )
+
+      app.ports.wnfsResponse.send({
+        tag: request.tag,
+        method: request.method,
+        path: request.path,
+        data: data.root ? null : (data.buffer ? Array.from(data) : data)
+      })
     })
 
     // Initialise, Pt. 2

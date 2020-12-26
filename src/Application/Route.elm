@@ -1,6 +1,7 @@
-module Route exposing (..)
+module Route exposing (Route(..), fromUrl, group, units)
 
 import Group exposing (Group)
+import Unit exposing (Unit)
 import Url exposing (Url)
 import Url.Parser exposing (..)
 
@@ -11,7 +12,7 @@ import Url.Parser exposing (..)
 
 type Route
     = Index
-    | Group { label : String } (Maybe Group)
+    | Group { index : Maybe Int, label : String } (Maybe Group)
     | NotFound
 
 
@@ -28,6 +29,30 @@ fromUrl url =
 
 
 
+-- 🏗
+
+
+group : Route -> Maybe Group
+group r =
+    case r of
+        Group _ maybe ->
+            maybe
+
+        _ ->
+            Nothing
+
+
+units : Route -> List Unit
+units r =
+    case r of
+        Group _ (Just g) ->
+            g.units
+
+        _ ->
+            []
+
+
+
 -- ㊙️
 
 
@@ -38,7 +63,9 @@ route =
         , map
             (\label ->
                 Group
-                    { label = Maybe.withDefault label (Url.percentDecode label) }
+                    { index = Nothing
+                    , label = Maybe.withDefault label (Url.percentDecode label)
+                    }
                     Nothing
             )
             (s "group" </> string)

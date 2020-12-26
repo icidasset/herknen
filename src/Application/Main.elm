@@ -13,6 +13,7 @@ import Ports
 import Radix exposing (..)
 import Return exposing (return)
 import Route
+import Unit.State as Unit
 import Unit.View as Unit
 import Url exposing (Url)
 import Welcome.View as Welcome
@@ -96,6 +97,24 @@ update msg =
 
         UpdateGroupLabel a b ->
             Group.updateLabel a b
+
+        -----------------------------------------
+        -- Unit
+        -----------------------------------------
+        CreateUnit ->
+            Unit.create
+
+        EditUnit a ->
+            Unit.edit a
+
+        FinishedEditingUnit a ->
+            Unit.finishedEditing a
+
+        RemoveUnit a ->
+            Unit.remove a
+
+        UpdateUnitLabel a b ->
+            Unit.updateLabel a b
 
         -----------------------------------------
         -- 🦉

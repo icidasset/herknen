@@ -29,7 +29,7 @@ fetch { label } =
     { path = [ "Lists", label ++ ".json" ]
     , tag = tag Fetch
     }
-        |> Wnfs.read base
+        |> Wnfs.readUtf8 base
         |> Ports.wnfsRequest
 
 
@@ -140,6 +140,7 @@ manage t a model =
 
 fetchNext : Manager
 fetchNext model =
+    -- TODO: Update route
     model.groups
         |> lookupNext
         |> Maybe.map (\{ label } -> fetch { label = label })

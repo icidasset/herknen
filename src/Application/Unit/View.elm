@@ -23,8 +23,7 @@ index units =
         --
         , Common.create
             [ A.title "Add something to the list"
-
-            -- , E.onClick CreateGroup
+            , E.onClick CreateUnit
             ]
         ]
 
@@ -38,11 +37,11 @@ listView units =
     units
         |> List.indexedMap
             (Common.item
-                { edit = \_ -> Bypass
-                , finishedEditing = \_ -> Bypass
-                , input = \_ _ -> Bypass
-                , remove = \_ -> Bypass
+                { edit = EditUnit
+                , finishedEditing = FinishedEditingUnit
+                , input = UpdateUnitLabel
+                , remove = RemoveUnit
                 }
-                []
+                [ E.onClick Bypass ]
             )
         |> Common.list

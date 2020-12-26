@@ -16,12 +16,13 @@ config : Common.Config Group
 config =
     { new = Group.new
     , getter = .groups
-    , setter = \model groups -> { model | groups = sort groups }
+    , setter = \model groups -> { model | groups = groups }
+    , sorter = sort
 
     --
-    , move = Group.Wnfs.move
-    , persist = Group.Wnfs.persist
-    , remove = Group.Wnfs.remove
+    , move = always Group.Wnfs.move
+    , persist = always Group.Wnfs.persist
+    , remove = always Group.Wnfs.remove
     }
 
 
