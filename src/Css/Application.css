@@ -10,12 +10,15 @@
 }
 
 
-body {
-  @apply bg-gray-50 font-body font-normal min-h-screen text-gray-900;
-  @apply dark:bg-gray-900 dark:text-gray-200;
+@font-face {
+  font-family: "Libre Baskerville";
+  src: url("fonts/LibreBaskerville[wght].woff2") format("woff2-variations");
+  font-weight: 1 999;
 }
 
 
-@screen sm {
-  body { @apply flex items-center justify-center }
+body {
+  @apply bg-gray-50 flex font-body font-normal items-center justify-center;
+  @apply min-h-screen text-gray-900;
+  @apply dark:bg-gray-900 dark:text-gray-200;
 }

@@ -4,9 +4,12 @@ import Group exposing (Group)
 import Group.Tag as Group exposing (Tag(..))
 import Json.Decode
 import Json.Encode
+import List.Extra as List
 import Ports
 import Radix exposing (..)
+import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
+import Route
 import Tag
 import Wnfs
 
@@ -90,7 +93,7 @@ manage t a model =
                 |> Json.Decode.decodeString Group.decoder
                 |> Result.map
                     (\group ->
-                        List.map
+                        (RemoteData.map << List.map)
                             (\g ->
                                 if g.label == group.label then
                                     group
@@ -101,7 +104,7 @@ manage t a model =
                             model.groups
                     )
                 |> Result.withDefault model.groups
-                |> (\groups -> { model | groups = groups })
+                |> (\remoteData -> { model | groups = remoteData })
                 |> fetchNext
 
         -----------------------------------------
@@ -122,7 +125,7 @@ manage t a model =
                         else
                             Nothing
                     )
-                |> (\groups -> { model | groups = sort groups, isLoading = False })
+                |> (\groups -> { model | groups = Success (sort groups) })
                 |> fetchNext
 
         -----------------------------------------
@@ -140,12 +143,31 @@ manage t a model =
 
 fetchNext : Manager
 fetchNext model =
-    -- TODO: Update route
     model.groups
+        |> RemoteData.withDefault []
         |> lookupNext
+        -----------------------------------------
+        -- If next
+        -----------------------------------------
         |> Maybe.map (\{ label } -> fetch { label = label })
-        |> Maybe.withDefault Cmd.none
-        |> Tuple.pair model
+        |> Maybe.map (Tuple.pair model)
+        -----------------------------------------
+        -- If finished
+        -----------------------------------------
+        |> Maybe.withDefault
+            (case model.route of
+                -- When we're expecting a group to be loaded
+                -- on application start.
+                Route.Group ({ label } as a) Nothing ->
+                    model.groups
+                        |> RemoteData.withDefault []
+                        |> List.find (.label >> (==) label)
+                        |> (\maybeGroup -> { model | route = Route.Group a maybeGroup })
+                        |> Return.singleton
+
+                _ ->
+                    Return.singleton model
+            )
 
 
 lookupNext : List Group -> Maybe Group

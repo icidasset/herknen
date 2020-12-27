@@ -15,10 +15,10 @@ import Url
 -- 🌄
 
 
-index : Model -> Html Msg
-index model =
+index : List Group -> Html Msg
+index groups =
     Common.index
-        [ listView model.groups
+        [ listView groups
 
         --
         , Common.create
@@ -43,6 +43,7 @@ listView groups =
                     , input = UpdateGroupLabel
                     , remove = RemoveGroup
                     }
+                    Html.a
                     [ A.href ("#/group/" ++ Url.percentEncode group.label) ]
                     idx
                     group

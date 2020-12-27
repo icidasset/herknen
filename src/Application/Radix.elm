@@ -3,6 +3,7 @@ module Radix exposing (..)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import Group exposing (Group)
+import RemoteData exposing (RemoteData)
 import Route exposing (Route)
 import Url exposing (Url)
 import Wnfs
@@ -21,14 +22,10 @@ type alias Flags =
 
 
 type alias Model =
-    { authenticated : Bool
-    , groups : List Group
+    { groups : RemoteData String (List Group)
     , navKey : Nav.Key
     , route : Route
     , url : Url
-
-    -- TODO: Replace groups with RemoteData type and remove this
-    , isLoading : Bool
     }
 
 

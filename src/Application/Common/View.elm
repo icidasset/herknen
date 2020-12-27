@@ -50,6 +50,7 @@ create attributes =
             , C.flex
             , C.items_center
             , C.p_4
+            , C.rounded_full
             ]
             attributes
         )
@@ -67,15 +68,24 @@ list =
             |> A.class
 
         --
-        , C.max_w_xs
         , C.rounded
         , C.shadow_md
         , C.w_full
+
+        -- Responsive
+        -------------
+        , C.sm__max_w_xs
         ]
 
 
-item : Messages msg -> List (Html.Attribute msg) -> Int -> Item item -> Html msg
-item messages attributes idx it =
+item :
+    Messages msg
+    -> (List (Html.Attribute msg) -> List (Html msg) -> Html msg)
+    -> List (Html.Attribute msg)
+    -> Int
+    -> Item item
+    -> Html msg
+item messages tag attributes idx it =
     let
         editMsg =
             messages.edit { index = idx }
@@ -139,7 +149,7 @@ item messages attributes idx it =
                 []
 
           else
-            Html.a
+            tag
                 (List.append
                     [ C.block
                     , C.px_4
@@ -184,6 +194,6 @@ item messages attributes idx it =
             , C.group_hover__opacity_100
             , C.group_hover__pointer_events_auto
             ]
-            [ Icons.remove 22 Inherit
+            [ Icons.check 22 Inherit
             ]
         ]

@@ -2,6 +2,7 @@ module Unit.View exposing (..)
 
 import Common.View as Common
 import Css.Classes as C
+import Group exposing (Group)
 import Html exposing (Html)
 import Html.Attributes as A
 import Html.Events as E
@@ -15,16 +16,45 @@ import Unit exposing (Unit)
 -- 🌄
 
 
-index : List Unit -> Html Msg
-index units =
+index : Group -> Html Msg
+index group =
     Common.index
-        [ listView units
+        [ Html.a
+            [ A.href "#/"
+            , A.title "Select another list"
+            ]
+            [ Html.h1
+                [ C.font_display
+                , C.italic
+                , C.mb_6
+                , C.opacity_50
+                , C.text_xl
+                ]
+                [ Html.text group.label ]
+            ]
 
         --
-        , Common.create
-            [ A.title "Add something to the list"
-            , E.onClick CreateUnit
-            ]
+        , listView group.units
+
+        --
+        , if List.isEmpty group.units then
+            Html.div
+                [ C.border_2
+                , C.border_dashed
+                , C.border_gray_300
+                , C.rounded_full
+                ]
+                [ Common.create
+                    [ A.title "Add something to the list"
+                    , E.onClick CreateUnit
+                    ]
+                ]
+
+          else
+            Common.create
+                [ A.title "Add something to the list"
+                , E.onClick CreateUnit
+                ]
         ]
 
 
@@ -42,6 +72,7 @@ listView units =
                 , input = UpdateUnitLabel
                 , remove = RemoveUnit
                 }
-                [ E.onClick Bypass ]
+                Html.span
+                []
             )
         |> Common.list

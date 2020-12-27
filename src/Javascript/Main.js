@@ -53,6 +53,8 @@ wn.initialise({ permissions: PERMISSIONS })
     })
 
     app.ports.wnfsRequest.subscribe(async request => {
+      console.log(request)
+
       if (request.method === "write") {
         request.arguments = [Uint8Array.from(request.arguments[0])]
       }

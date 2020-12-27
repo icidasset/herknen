@@ -21,12 +21,15 @@
             "elm-community/list-extra": "8.2.4",
             "icidasset/elm-material-icons": "5.0.0",
             "jouderianjr/elm-loaders": "1.0.2",
+            "krisajenkins/remotedata": "6.0.1",
             "ohanhi/keyboard": "2.0.1",
             "robinheghan/keyboard-events": "1.0.0",
             "zwilias/elm-utf-tools": "2.0.1"
         },
         "indirect": {
             "avh4/elm-color": "1.0.0",
+            "elm/file": "1.0.5",
+            "elm/http": "2.0.0",
             "elm/svg": "1.0.1",
             "elm/virtual-dom": "1.0.2"
         }

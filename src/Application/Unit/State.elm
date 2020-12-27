@@ -5,6 +5,7 @@ import Group exposing (Group)
 import Group.Wnfs exposing (sort)
 import Ports
 import Radix exposing (..)
+import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
 import Route
 import Unit exposing (Unit)
@@ -31,6 +32,7 @@ config =
                             Route.Group a (Just updatedGroup)
                     in
                     model.groups
+                        |> RemoteData.withDefault []
                         |> List.map
                             (\g ->
                                 -- TODO: Use index
@@ -40,7 +42,12 @@ config =
                                 else
                                     g
                             )
-                        |> (\groups -> { model | groups = groups, route = updatedRoute })
+                        |> (\groups ->
+                                { model
+                                    | groups = Success groups
+                                    , route = updatedRoute
+                                }
+                           )
 
                 route ->
                     model

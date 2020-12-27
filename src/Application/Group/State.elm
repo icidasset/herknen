@@ -5,6 +5,7 @@ import Group exposing (Group)
 import Group.Wnfs exposing (sort)
 import Ports
 import Radix exposing (..)
+import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
 
 
@@ -15,8 +16,8 @@ import Return exposing (return)
 config : Common.Config Group
 config =
     { new = Group.new
-    , getter = .groups
-    , setter = \model groups -> { model | groups = groups }
+    , getter = .groups >> RemoteData.withDefault []
+    , setter = \model groups -> { model | groups = Success groups }
     , sorter = sort
 
     --

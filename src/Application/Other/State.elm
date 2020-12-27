@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Group.Wnfs
 import List.Extra as List
 import Radix exposing (..)
+import RemoteData
 import Return exposing (return)
 import Route
 import Tag
@@ -35,7 +36,7 @@ urlChanged url model =
                 maybeGroup =
                     List.find
                         (.label >> (==) label)
-                        model.groups
+                        (RemoteData.withDefault [] model.groups)
 
                 route =
                     Route.Group

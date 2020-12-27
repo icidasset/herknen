@@ -6,7 +6,8 @@ export default {
   theme: {
 
     fontFamily: {
-      body: [ "Heebo" ]
+      body: [ "Heebo" ],
+      display: [ "Libre Baskerville" ]
     },
 
 

@@ -11,6 +11,7 @@ import Loaders
 import Other.State as Other
 import Ports
 import Radix exposing (..)
+import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
 import Route
 import Unit.State as Unit
@@ -42,11 +43,9 @@ main =
 init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init _ url navKey =
     return
-        { authenticated = False
-        , isLoading = True
-        , groups = []
+        { groups = Loading
         , navKey = navKey
-        , route = Route.Index
+        , route = Route.fromUrl url
         , url = url
         }
         Cmd.none
@@ -54,17 +53,13 @@ init _ url navKey =
 
 initPartDeux : { authenticated : Bool } -> Model -> ( Model, Cmd Msg )
 initPartDeux { authenticated } model =
-    return
-        { model
-            | authenticated = authenticated
-            , isLoading = authenticated
-        }
-        (if authenticated then
+    if authenticated then
+        return
+            { model | groups = Loading }
             Group.Wnfs.index
 
-         else
-            Cmd.none
-        )
+    else
+        Return.singleton { model | groups = NotAsked }
 
 
 
@@ -149,26 +144,30 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Herknen"
     , body =
-        [ if model.isLoading then
-            Loaders.puff 32 "currentColor"
+        [ case model.groups of
+            NotAsked ->
+                Welcome.view
 
-          else if model.authenticated then
-            case model.route of
-                Route.Index ->
-                    Group.index model
+            Loading ->
+                Loaders.puff 32 "currentColor"
 
-                Route.Group _ (Just group) ->
-                    Unit.index group.units
+            Failure e ->
+                -- TODO
+                Html.text e
 
-                Route.Group { label } _ ->
-                    -- TODO: Loading
-                    Html.text ("Loading " ++ label)
+            Success groups ->
+                case model.route of
+                    Route.Index ->
+                        Group.index groups
 
-                Route.NotFound ->
-                    -- TODO: Proper 404 page
-                    Html.text "404"
+                    Route.Group _ (Just group) ->
+                        Unit.index group
 
-          else
-            Welcome.view
+                    Route.Group { label } _ ->
+                        Loaders.puff 32 "currentColor"
+
+                    Route.NotFound ->
+                        -- TODO: Proper 404 page
+                        Html.text "404"
         ]
     }
