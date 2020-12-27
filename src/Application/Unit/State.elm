@@ -54,9 +54,9 @@ config =
     , sorter = identity
 
     --
-    , move = groupCmd Group.Wnfs.move
+    , move = groupCmd Group.Wnfs.persist
     , persist = groupCmd Group.Wnfs.persist
-    , remove = groupCmd Group.Wnfs.remove
+    , remove = groupCmd Group.Wnfs.persist
     }
 
 

@@ -104,19 +104,23 @@ finishedEditing config { index, save } model =
             )
             ( [], Nothing )
         |> (\( items, changedItem ) ->
-                return
-                    (config.setter model <| config.sorter items)
-                    (case ( save, changedItem ) of
-                        ( True, Just item ) ->
-                            if item.oldLabel == "" then
-                                config.persist model item
+                items
+                    |> config.sorter
+                    |> config.setter model
+                    |> Return.singleton
+                    |> Return.effect_
+                        (\newModel ->
+                            case ( save, changedItem ) of
+                                ( True, Just item ) ->
+                                    if item.oldLabel == "" then
+                                        config.persist newModel item
 
-                            else
-                                config.move model item
+                                    else
+                                        config.move newModel item
 
-                        _ ->
-                            Cmd.none
-                    )
+                                _ ->
+                                    Cmd.none
+                        )
            )
 
 
@@ -134,15 +138,18 @@ remove config { index } model =
             )
             ( [], Nothing )
         |> (\( items, maybeDeletedItem ) ->
-                return
-                    (config.setter model items)
-                    (case maybeDeletedItem of
-                        Just deletedItem ->
-                            config.remove model deletedItem
+                items
+                    |> config.setter model
+                    |> Return.singleton
+                    |> Return.effect_
+                        (\newModel ->
+                            case maybeDeletedItem of
+                                Just deletedItem ->
+                                    config.remove newModel deletedItem
 
-                        Nothing ->
-                            Cmd.none
-                    )
+                                Nothing ->
+                                    Cmd.none
+                        )
            )
 
 

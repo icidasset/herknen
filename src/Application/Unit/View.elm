@@ -27,7 +27,7 @@ index group =
                 [ C.font_display
                 , C.italic
                 , C.mb_6
-                , C.opacity_50
+                , C.text_gray_400
                 , C.text_xl
                 ]
                 [ Html.text group.label ]
@@ -43,6 +43,10 @@ index group =
                 , C.border_dashed
                 , C.border_gray_300
                 , C.rounded_full
+
+                -- Dark mode
+                ------------
+                , C.border_gray_600
                 ]
                 [ Common.create
                     [ A.title "Add something to the list"
