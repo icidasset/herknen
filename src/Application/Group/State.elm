@@ -3,6 +3,7 @@ module Group.State exposing (..)
 import Common.State as Common
 import Group exposing (Group)
 import Group.Wnfs exposing (sort)
+import Html.Events.Extra.Pointer as Pointer
 import Ports
 import Radix exposing (..)
 import RemoteData exposing (RemoteData(..))
@@ -36,6 +37,11 @@ create =
     Common.create config
 
 
+complete : { index : Int } -> Manager
+complete { index } model =
+    Return.singleton model
+
+
 edit : { index : Int } -> Manager
 edit =
     Common.edit config
@@ -49,6 +55,11 @@ finishedEditing =
 remove : { index : Int } -> Manager
 remove =
     Common.remove config
+
+
+startGesture : { index : Int } -> Pointer.Event -> Manager
+startGesture =
+    Common.startGesture config
 
 
 updateLabel : { index : Int } -> String -> Manager

@@ -3,6 +3,7 @@ module Radix exposing (..)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import Group exposing (Group)
+import Html.Events.Extra.Pointer as Pointer
 import RemoteData exposing (RemoteData)
 import Route exposing (Route)
 import Url exposing (Url)
@@ -45,18 +46,22 @@ type Msg
       -----------------------------------------
       -- Group
       -----------------------------------------
+    | CompleteGroup { index : Int }
     | CreateGroup
     | EditGroup { index : Int }
     | FinishedEditingGroup { index : Int, save : Bool }
     | RemoveGroup { index : Int }
+    | StartGroupGesture { index : Int } Pointer.Event
     | UpdateGroupLabel { index : Int } String
       -----------------------------------------
       -- Unit
       -----------------------------------------
+    | CompleteUnit { index : Int }
     | CreateUnit
     | EditUnit { index : Int }
     | FinishedEditingUnit { index : Int, save : Bool }
     | RemoveUnit { index : Int }
+    | StartUnitGesture { index : Int } Pointer.Event
     | UpdateUnitLabel { index : Int } String
       -----------------------------------------
       -- 🦉

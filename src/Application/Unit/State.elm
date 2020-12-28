@@ -3,6 +3,7 @@ module Unit.State exposing (..)
 import Common.State as Common
 import Group exposing (Group)
 import Group.Wnfs exposing (sort)
+import Html.Events.Extra.Pointer as Pointer
 import Ports
 import Radix exposing (..)
 import RemoteData exposing (RemoteData(..))
@@ -54,14 +55,14 @@ config =
     , sorter = identity
 
     --
-    , move = groupCmd Group.Wnfs.persist
-    , persist = groupCmd Group.Wnfs.persist
-    , remove = groupCmd Group.Wnfs.persist
+    , move = \m _ -> groupCmd Group.Wnfs.persist m
+    , persist = \m _ -> groupCmd Group.Wnfs.persist m
+    , remove = \m _ -> groupCmd Group.Wnfs.persist m
     }
 
 
-groupCmd : (Group -> Cmd Msg) -> Model -> Unit -> Cmd Msg
-groupCmd cmdFn model _ =
+groupCmd : (Group -> Cmd Msg) -> Model -> Cmd Msg
+groupCmd cmdFn model =
     model.route
         |> Route.group
         |> Maybe.map cmdFn
@@ -77,6 +78,17 @@ create =
     Common.create config
 
 
+complete : { index : Int } -> Manager
+complete { index } model =
+    model
+        |> Common.adjustItemWithIndex
+            config
+            index
+            (\unit -> { unit | isDone = not unit.isDone })
+        |> Return.singleton
+        |> Return.command (groupCmd Group.Wnfs.persist model)
+
+
 edit : { index : Int } -> Manager
 edit =
     Common.edit config
@@ -90,6 +102,11 @@ finishedEditing =
 remove : { index : Int } -> Manager
 remove =
     Common.remove config
+
+
+startGesture : { index : Int } -> Pointer.Event -> Manager
+startGesture =
+    Common.startGesture config
 
 
 updateLabel : { index : Int } -> String -> Manager

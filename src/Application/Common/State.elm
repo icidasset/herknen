@@ -1,6 +1,7 @@
 module Common.State exposing (..)
 
 import Common.Item exposing (Item)
+import Html.Events.Extra.Pointer as Pointer
 import List.Extra as List
 import Ports
 import Radix exposing (..)
@@ -57,7 +58,7 @@ edit config { index } model =
         |> adjustItemWithIndex
             config
             index
-            (\i -> { i | editing = True, isNew = False, oldLabel = i.label })
+            (\i -> { i | isEditing = True, isNew = False, oldLabel = i.label })
         |> Return.singleton
         |> Return.command (Ports.focusOnTextInput ())
 
@@ -71,7 +72,7 @@ finishedEditing config { index, save } model =
                 if idx == index then
                     if String.trim i.label == "" && not i.isNew then
                         acc
-                            |> (::) { i | editing = False, label = i.oldLabel }
+                            |> (::) { i | isEditing = False, label = i.oldLabel }
                             |> (\a -> ( a, changedItem ))
 
                     else
@@ -80,7 +81,7 @@ finishedEditing config { index, save } model =
                                 String.trim i.label
 
                             group =
-                                { i | editing = False, label = label }
+                                { i | isEditing = False, label = label }
                         in
                         acc
                             |> (if i.isNew then
@@ -151,6 +152,22 @@ remove config { index } model =
                                     Cmd.none
                         )
            )
+
+
+startGesture : Config item -> { index : Int } -> Pointer.Event -> Manager
+startGesture config { index } event model =
+    model
+        |> config.getter
+        |> List.indexedMap
+            (\idx item ->
+                if idx == index then
+                    { item | isGestureTarget = True }
+
+                else
+                    { item | isGestureTarget = False }
+            )
+        |> config.setter model
+        |> Return.singleton
 
 
 updateLabel : Config item -> { index : Int } -> String -> Manager

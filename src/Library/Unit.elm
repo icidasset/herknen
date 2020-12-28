@@ -10,13 +10,15 @@ import Time
 
 
 type alias Unit =
-    { label : String
+    { isDone : Bool
+    , label : String
     , notifyAt : Maybe Time.Posix
 
     -----------------------------------------
     -- Internal
     -----------------------------------------
-    , editing : Bool
+    , isEditing : Bool
+    , isGestureTarget : Bool
     , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
@@ -25,13 +27,15 @@ type alias Unit =
 
 new : Unit
 new =
-    { label = ""
+    { isDone = False
+    , label = ""
     , notifyAt = Nothing
 
     -----------------------------------------
     -- Internal
     -----------------------------------------
-    , editing = True
+    , isEditing = True
+    , isGestureTarget = False
     , isLoading = False
     , isNew = True
     , oldLabel = ""
@@ -44,24 +48,29 @@ new =
 
 decoder : Json.Decode.Decoder Unit
 decoder =
-    Json.Decode.map
-        (\label ->
-            { label = label
+    Json.Decode.map2
+        (\isDone label ->
+            { isDone = isDone
+            , label = label
             , notifyAt = Nothing
 
             -----------------------------------------
             -- Internal
             -----------------------------------------
-            , editing = False
+            , isEditing = False
+            , isGestureTarget = False
             , isLoading = False
             , isNew = False
             , oldLabel = label
             }
         )
+        (Json.Decode.field "isDone" Json.Decode.bool)
         (Json.Decode.field "label" Json.Decode.string)
 
 
 encode : Unit -> Json.Value
 encode unit =
     Json.object
-        [ ( "label", Json.string unit.label ) ]
+        [ ( "isDone", Json.bool unit.isDone )
+        , ( "label", Json.string unit.label )
+        ]

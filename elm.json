@@ -22,6 +22,7 @@
             "icidasset/elm-material-icons": "5.0.0",
             "jouderianjr/elm-loaders": "1.0.2",
             "krisajenkins/remotedata": "6.0.1",
+            "mpizenberg/elm-pointer-events": "4.0.2",
             "ohanhi/keyboard": "2.0.1",
             "robinheghan/keyboard-events": "1.0.0",
             "zwilias/elm-utf-tools": "2.0.1"

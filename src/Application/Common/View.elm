@@ -5,6 +5,7 @@ import Css.Classes as C
 import Html exposing (Html)
 import Html.Attributes as A
 import Html.Events as E
+import Html.Events.Extra.Pointer as Pointer
 import Json.Decode as Decode
 import Keyboard exposing (Key(..))
 import Keyboard.Events as Keyboard
@@ -20,8 +21,10 @@ import Unit exposing (Unit)
 
 
 type alias Messages msg =
-    { edit : { index : Int } -> msg
+    { complete : { index : Int } -> msg
+    , edit : { index : Int } -> msg
     , finishedEditing : { index : Int, save : Bool } -> msg
+    , gestureTarget : { index : Int } -> Pointer.Event -> msg
     , input : { index : Int } -> String -> msg
     , remove : { index : Int } -> msg
     }
@@ -36,25 +39,44 @@ index =
     Html.div
         [ C.flex
         , C.flex_col
+        , C.min_h_screen
         , C.items_center
-        , C.justify_center
         , C.w_full
+
+        -- Responsive
+        -------------
+        , C.sm__min_h_0
+        , C.sm__justify_center
         ]
 
 
-create : List (Html.Attribute msg) -> Html msg
-create attributes =
-    Html.div
-        (List.append
-            [ C.cursor_pointer
-            , C.flex
-            , C.items_center
-            , C.p_4
-            , C.rounded_full
-            ]
-            attributes
+create : { withBorder : Bool } -> List (Html.Attribute msg) -> Html msg
+create { withBorder } attributes =
+    Html.button
+        ([ C.appearance_none
+         , C.cursor_pointer
+         , C.flex
+         , C.items_center
+         , C.p_5
+         , C.rounded_full
+         ]
+            |> (if withBorder then
+                    List.append
+                        [ C.border_2
+                        , C.border_dashed
+                        , C.border_gray_300
+
+                        -- Dark mode
+                        ------------
+                        , C.border_gray_600
+                        ]
+
+                else
+                    identity
+               )
+            |> List.append attributes
         )
-        [ Html.span
+        [ Html.button
             [ C.text_gray_400 ]
             [ Icons.add 22 Inherit ]
         ]
@@ -94,8 +116,12 @@ item messages tag attributes idx it =
             messages.finishedEditing { index = idx, save = bool }
     in
     Html.li
-        [ idx
-            |> Theme.itemForIndex Theme.default
+        [ (if it.isDone then
+            [ "bg-gray-200", "dark:bg-gray-800" ]
+
+           else
+            Theme.itemForIndex Theme.default idx
+          )
             |> Theme.mergeClasses
             |> A.class
 
@@ -106,9 +132,10 @@ item messages tag attributes idx it =
         , C.group
         , C.pt_px
         , C.relative
+        , C.transition_colors
 
         --
-        , if it.editing then
+        , if it.isEditing then
             C.shadow_inner
 
           else
@@ -122,7 +149,7 @@ item messages tag attributes idx it =
         , C.sm__first__rounded_t
         , C.sm__last__rounded_b
         ]
-        [ if it.editing then
+        [ if it.isEditing then
             Html.input
                 [ A.value it.label
                 , A.autocomplete False
@@ -150,13 +177,29 @@ item messages tag attributes idx it =
 
           else
             tag
-                (List.append
-                    [ C.block
-                    , C.px_4
-                    , C.py_3
-                    , C.tracking_wide
-                    ]
-                    attributes
+                ([ C.block
+                 , C.px_4
+                 , C.py_3
+                 , C.tracking_wide
+                 ]
+                    |> (if it.isLoading then
+                            identity
+
+                        else
+                            { index = idx }
+                                |> messages.gestureTarget
+                                |> Pointer.onDown
+                                |> List.singleton
+                                |> List.append
+                       )
+                    |> (if it.isDone then
+                            List.append [ C.line_through ]
+
+                        else
+                            identity
+                       )
+                    |> List.append
+                        attributes
                 )
                 [ Html.span
                     (if it.isLoading then
@@ -174,26 +217,44 @@ item messages tag attributes idx it =
                     [ Html.text it.label ]
                 ]
 
-        --
-        , Html.div
+        -----------------------------------------
+        -- Action Left
+        -----------------------------------------
+        , action
             [ E.onClick (messages.remove { index = idx })
-
-            --
-            , C.absolute
-            , C.cursor_pointer
-            , C.opacity_0
-            , C.neg_translate_y_1over2
-            , C.pointer_events_none
-            , C.px_4
             , C.right_full
-            , C.text_gray_400
-            , C.top_1over2
-            , C.transform
+            ]
+            [ Icons.clear 18 Inherit ]
 
-            --
-            , C.group_hover__opacity_100
-            , C.group_hover__pointer_events_auto
+        -----------------------------------------
+        -- Action Right
+        -----------------------------------------
+        , action
+            [ E.onClick (messages.complete { index = idx })
+            , C.left_full
             ]
-            [ Icons.check 22 Inherit
-            ]
+            [ Icons.done 18 Inherit ]
         ]
+
+
+action : List (Html.Attribute msg) -> List (Html msg) -> Html msg
+action attributes =
+    [ C.absolute
+    , C.appearance_none
+    , C.cursor_pointer
+    , C.opacity_0
+    , C.neg_translate_y_1over2
+    , C.pointer_events_none
+    , C.px_5
+    , C.py_4
+    , C.text_gray_400
+    , C.top_1over2
+    , C.transform
+    , C.transition_opacity
+
+    --
+    , C.group_hover__opacity_100
+    , C.group_hover__pointer_events_auto
+    ]
+        |> List.append attributes
+        |> Html.button

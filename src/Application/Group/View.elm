@@ -22,6 +22,7 @@ index groups =
 
         --
         , Common.create
+            { withBorder = List.isEmpty groups }
             [ A.title "Create a new list"
             , E.onClick CreateGroup
             ]
@@ -38,8 +39,10 @@ listView groups =
         |> List.indexedMap
             (\idx group ->
                 Common.item
-                    { edit = EditGroup
+                    { complete = CompleteGroup
+                    , edit = EditGroup
                     , finishedEditing = FinishedEditingGroup
+                    , gestureTarget = StartGroupGesture
                     , input = UpdateGroupLabel
                     , remove = RemoveGroup
                     }

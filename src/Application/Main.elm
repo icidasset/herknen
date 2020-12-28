@@ -78,6 +78,9 @@ update msg =
         -----------------------------------------
         -- Group
         -----------------------------------------
+        CompleteGroup a ->
+            Group.complete a
+
         CreateGroup ->
             Group.create
 
@@ -90,12 +93,18 @@ update msg =
         RemoveGroup a ->
             Group.remove a
 
+        StartGroupGesture a b ->
+            Group.startGesture a b
+
         UpdateGroupLabel a b ->
             Group.updateLabel a b
 
         -----------------------------------------
         -- Unit
         -----------------------------------------
+        CompleteUnit a ->
+            Unit.complete a
+
         CreateUnit ->
             Unit.create
 
@@ -107,6 +116,9 @@ update msg =
 
         RemoveUnit a ->
             Unit.remove a
+
+        StartUnitGesture a b ->
+            Unit.startGesture a b
 
         UpdateUnitLabel a b ->
             Unit.updateLabel a b

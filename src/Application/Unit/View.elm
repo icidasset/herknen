@@ -24,11 +24,17 @@ index group =
             , A.title "Select another list"
             ]
             [ Html.h1
-                [ C.font_display
+                [ C.antialiased
+                , C.font_display
                 , C.italic
                 , C.mb_6
+                , C.mt_8
                 , C.text_gray_400
-                , C.text_xl
+                , C.text_lg
+
+                -- Responsive
+                -------------
+                , C.sm__mt_0
                 ]
                 [ Html.text group.label ]
             ]
@@ -37,28 +43,11 @@ index group =
         , listView group.units
 
         --
-        , if List.isEmpty group.units then
-            Html.div
-                [ C.border_2
-                , C.border_dashed
-                , C.border_gray_300
-                , C.rounded_full
-
-                -- Dark mode
-                ------------
-                , C.border_gray_600
-                ]
-                [ Common.create
-                    [ A.title "Add something to the list"
-                    , E.onClick CreateUnit
-                    ]
-                ]
-
-          else
-            Common.create
-                [ A.title "Add something to the list"
-                , E.onClick CreateUnit
-                ]
+        , Common.create
+            { withBorder = List.isEmpty group.units }
+            [ A.title "Add something to the list"
+            , E.onClick CreateUnit
+            ]
         ]
 
 
@@ -71,8 +60,10 @@ listView units =
     units
         |> List.indexedMap
             (Common.item
-                { edit = EditUnit
+                { complete = CompleteUnit
+                , edit = EditUnit
                 , finishedEditing = FinishedEditingUnit
+                , gestureTarget = StartUnitGesture
                 , input = UpdateUnitLabel
                 , remove = RemoveUnit
                 }

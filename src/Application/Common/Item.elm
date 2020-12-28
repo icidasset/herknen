@@ -5,7 +5,9 @@ module Common.Item exposing (..)
 
 type alias Item item =
     { item
-        | editing : Bool
+        | isDone : Bool
+        , isEditing : Bool
+        , isGestureTarget : Bool
         , isLoading : Bool
         , isNew : Bool
         , label : String

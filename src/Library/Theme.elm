@@ -20,7 +20,7 @@ type alias Theme =
 default : Theme
 default =
     { container =
-        [ "text-opacity-90", "text-white" ]
+        [ "text-opacity-90", "text-white", "dark:text-opacity-80" ]
     , items =
         [ [ "bg-opacity-80", "bg-emerald-400" ]
         , [ "bg-opacity-80", "bg-emerald-500" ]

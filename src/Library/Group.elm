@@ -20,7 +20,9 @@ type alias Group =
     -----------------------------------------
     -- Internal
     -----------------------------------------
-    , editing : Bool
+    , isDone : Bool
+    , isEditing : Bool
+    , isGestureTarget : Bool
     , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
@@ -38,7 +40,9 @@ new =
     , units = []
 
     --
-    , editing = True
+    , isDone = False
+    , isEditing = True
+    , isGestureTarget = False
     , isLoading = False
     , isNew = True
     , oldLabel = ""
@@ -52,7 +56,9 @@ temporary label =
     , units = []
 
     --
-    , editing = False
+    , isDone = False
+    , isEditing = False
+    , isGestureTarget = False
     , isLoading = True
     , isNew = False
     , oldLabel = label
@@ -87,7 +93,9 @@ decoder =
             , units = units
 
             --
-            , editing = False
+            , isDone = False
+            , isEditing = False
+            , isGestureTarget = False
             , isLoading = False
             , isNew = False
             , oldLabel = label
