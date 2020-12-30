@@ -18,7 +18,6 @@
 
 
 body {
-  @apply bg-gray-50 flex font-body font-normal items-center justify-center;
-  @apply min-h-screen text-gray-900;
+  @apply bg-gray-50 font-body font-normal text-gray-900;
   @apply dark:bg-gray-900 dark:text-gray-200;
 }

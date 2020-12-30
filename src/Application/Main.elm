@@ -2,11 +2,13 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation
+import Css.Classes as C
 import Group exposing (Group)
 import Group.State as Group
 import Group.View as Group
 import Group.Wnfs
-import Html
+import Html exposing (Html)
+import Html.Events.Extra.Pointer as Pointer
 import Loaders
 import Other.State as Other
 import Ports
@@ -45,6 +47,7 @@ init _ url navKey =
     return
         { groups = Loading
         , navKey = navKey
+        , pointerStartCoordinates = Nothing
         , route = Route.fromUrl url
         , url = url
         }
@@ -129,6 +132,12 @@ update msg =
         GotWnfsResponse a ->
             Other.gotWnfsResponse a
 
+        PointerDown a ->
+            Other.pointerDown a
+
+        PointerUp a ->
+            Other.pointerUp a
+
         UrlChanged a ->
             Other.urlChanged a
 
@@ -155,7 +164,29 @@ subscriptions _ =
 view : Model -> Browser.Document Msg
 view model =
     { title = "Herknen"
-    , body =
+    , body = [ container model ]
+    }
+
+
+container : Model -> Html Msg
+container model =
+    Html.section
+        [ Pointer.onUp PointerUp
+
+        --
+        , Pointer.onWithOptions "pointerdown"
+            { stopPropagation = False
+            , preventDefault = False
+            }
+            PointerDown
+
+        --
+        , C.flex
+        , C.items_center
+        , C.justify_center
+        , C.min_h_screen
+        , C.select_none
+        ]
         [ case model.groups of
             NotAsked ->
                 Welcome.view
@@ -172,7 +203,7 @@ view model =
                     Route.Index ->
                         Group.index groups
 
-                    Route.Group _ (Just group) ->
+                    Route.Group _ (Just { group }) ->
                         Unit.index group
 
                     Route.Group { label } _ ->
@@ -182,4 +213,3 @@ view model =
                         -- TODO: Proper 404 page
                         Html.text "404"
         ]
-    }

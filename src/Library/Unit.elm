@@ -1,4 +1,4 @@
-module Unit exposing (..)
+module Unit exposing (Unit, decoder, encode, findGestureTargetWithIndex, new)
 
 import Json.Decode
 import Json.Encode as Json
@@ -17,8 +17,8 @@ type alias Unit =
     -----------------------------------------
     -- Internal
     -----------------------------------------
+    , gestureTarget : Maybe { x : Float, y : Float }
     , isEditing : Bool
-    , isGestureTarget : Bool
     , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
@@ -34,8 +34,8 @@ new =
     -----------------------------------------
     -- Internal
     -----------------------------------------
+    , gestureTarget = Nothing
     , isEditing = True
-    , isGestureTarget = False
     , isLoading = False
     , isNew = True
     , oldLabel = ""
@@ -57,8 +57,8 @@ decoder =
             -----------------------------------------
             -- Internal
             -----------------------------------------
+            , gestureTarget = Nothing
             , isEditing = False
-            , isGestureTarget = False
             , isLoading = False
             , isNew = False
             , oldLabel = label
@@ -74,3 +74,40 @@ encode unit =
         [ ( "isDone", Json.bool unit.isDone )
         , ( "label", Json.string unit.label )
         ]
+
+
+
+-- 🔬
+
+
+findGestureTargetWithIndex :
+    List Unit
+    ->
+        Maybe
+            { index : Int
+            , coordinates : { x : Float, y : Float }
+            }
+findGestureTargetWithIndex =
+    findGestureTargetWithIndex_ -1
+
+
+findGestureTargetWithIndex_ :
+    Int
+    -> List Unit
+    ->
+        Maybe
+            { index : Int
+            , coordinates : { x : Float, y : Float }
+            }
+findGestureTargetWithIndex_ counter units =
+    case units of
+        [] ->
+            Nothing
+
+        unit :: rest ->
+            case unit.gestureTarget of
+                Just coordinates ->
+                    Just { index = counter + 1, coordinates = coordinates }
+
+                Nothing ->
+                    findGestureTargetWithIndex_ (counter + 1) rest

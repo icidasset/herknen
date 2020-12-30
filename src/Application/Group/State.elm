@@ -4,6 +4,7 @@ import Common.State as Common
 import Group exposing (Group)
 import Group.Wnfs exposing (sort)
 import Html.Events.Extra.Pointer as Pointer
+import List.Extra as List
 import Ports
 import Radix exposing (..)
 import RemoteData exposing (RemoteData(..))
@@ -39,7 +40,20 @@ create =
 
 complete : { index : Int } -> Manager
 complete { index } model =
-    Return.singleton model
+    model
+        |> Common.adjustItemWithIndex
+            config
+            index
+            Group.markAllAsDone
+        |> Return.singleton
+        |> Return.effect_
+            (\newModel ->
+                newModel.groups
+                    |> RemoteData.toMaybe
+                    |> Maybe.andThen (List.getAt index)
+                    |> Maybe.map Group.Wnfs.persist
+                    |> Maybe.withDefault Cmd.none
+            )
 
 
 edit : { index : Int } -> Manager

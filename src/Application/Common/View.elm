@@ -59,6 +59,13 @@ create { withBorder } attributes =
          , C.items_center
          , C.p_5
          , C.rounded_full
+         , C.text_gray_400
+         , C.transition_colors
+
+         --
+         , C.focus__outline_none
+         , C.focus__text_black
+         , C.dark__focus__text_white
          ]
             |> (if withBorder then
                     List.append
@@ -76,9 +83,7 @@ create { withBorder } attributes =
                )
             |> List.append attributes
         )
-        [ Html.button
-            [ C.text_gray_400 ]
-            [ Icons.add 22 Inherit ]
+        [ Icons.add 22 Inherit
         ]
 
 
@@ -117,7 +122,7 @@ item messages tag attributes idx it =
     in
     Html.li
         [ (if it.isDone then
-            [ "bg-gray-200", "dark:bg-gray-800" ]
+            Theme.completedItemForIndex Theme.default idx
 
            else
             Theme.itemForIndex Theme.default idx
@@ -180,7 +185,15 @@ item messages tag attributes idx it =
                 ([ C.block
                  , C.px_4
                  , C.py_3
+                 , C.rounded
                  , C.tracking_wide
+
+                 --
+                 , C.focus__outline_none
+                 , C.focus__ring_2
+                 , C.focus__ring_offset_gray_900
+                 , C.focus__ring_offset_4
+                 , C.focus__ring_gray_400
                  ]
                     |> (if it.isLoading then
                             identity
@@ -239,7 +252,10 @@ item messages tag attributes idx it =
 
 action : List (Html.Attribute msg) -> List (Html msg) -> Html msg
 action attributes =
-    [ C.absolute
+    [ A.tabindex -1
+
+    --
+    , C.absolute
     , C.appearance_none
     , C.cursor_pointer
     , C.opacity_0
@@ -250,11 +266,16 @@ action attributes =
     , C.text_gray_400
     , C.top_1over2
     , C.transform
-    , C.transition_opacity
+    , C.transition_all
 
     --
     , C.group_hover__opacity_100
     , C.group_hover__pointer_events_auto
+
+    --
+    , C.focus__outline_none
+    , C.focus__text_black
+    , C.dark__focus__text_white
     ]
         |> List.append attributes
         |> Html.button

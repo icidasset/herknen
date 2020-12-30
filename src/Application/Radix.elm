@@ -25,6 +25,7 @@ type alias Flags =
 type alias Model =
     { groups : RemoteData String (List Group)
     , navKey : Nav.Key
+    , pointerStartCoordinates : Maybe { x : Float, y : Float }
     , route : Route
     , url : Url
     }
@@ -68,6 +69,8 @@ type Msg
       -----------------------------------------
     | GotWnfsResponse Wnfs.Response
     | Initialise { authenticated : Bool }
+    | PointerDown Pointer.Event
+    | PointerUp Pointer.Event
     | UrlChanged Url
     | UrlRequested UrlRequest
 

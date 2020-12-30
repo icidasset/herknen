@@ -161,10 +161,17 @@ startGesture config { index } event model =
         |> List.indexedMap
             (\idx item ->
                 if idx == index then
-                    { item | isGestureTarget = True }
+                    let
+                        ( x, y ) =
+                            event.pointer.pagePos
+
+                        target =
+                            Just { x = x, y = y }
+                    in
+                    { item | gestureTarget = target }
 
                 else
-                    { item | isGestureTarget = False }
+                    { item | gestureTarget = Nothing }
             )
         |> config.setter model
         |> Return.singleton

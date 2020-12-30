@@ -24,20 +24,19 @@ config =
     , setter =
         \model units ->
             case model.route of
-                Route.Group a (Just group) ->
+                Route.Group attr (Just { index, group }) ->
                     let
                         updatedGroup =
                             { group | units = units }
 
                         updatedRoute =
-                            Route.Group a (Just updatedGroup)
+                            Route.Group attr (Just { index = index, group = updatedGroup })
                     in
                     model.groups
                         |> RemoteData.withDefault []
-                        |> List.map
-                            (\g ->
-                                -- TODO: Use index
-                                if g.label == updatedGroup.label && g.icon == updatedGroup.icon then
+                        |> List.indexedMap
+                            (\i g ->
+                                if i == index then
                                     updatedGroup
 
                                 else
@@ -86,7 +85,7 @@ complete { index } model =
             index
             (\unit -> { unit | isDone = not unit.isDone })
         |> Return.singleton
-        |> Return.command (groupCmd Group.Wnfs.persist model)
+        |> Return.effect_ (groupCmd Group.Wnfs.persist)
 
 
 edit : { index : Int } -> Manager

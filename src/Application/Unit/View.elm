@@ -22,14 +22,24 @@ index group =
         [ Html.a
             [ A.href "#/"
             , A.title "Select another list"
+
+            --
+            , C.text_gray_400
+            , C.transition_colors
+
+            --
+            , C.focus__outline_none
+            , C.focus__text_black
+            , C.focus__underline
+            , C.dark__focus__text_white
             ]
             [ Html.h1
                 [ C.antialiased
                 , C.font_display
                 , C.italic
-                , C.mb_6
-                , C.mt_8
-                , C.text_gray_400
+                , C.pb_6
+                , C.pt_8
+                , C.px_5
                 , C.text_lg
 
                 -- Responsive

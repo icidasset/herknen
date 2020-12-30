@@ -49,6 +49,6 @@ listView groups =
                     Html.a
                     [ A.href ("#/group/" ++ Url.percentEncode group.label) ]
                     idx
-                    group
+                    { group | isDone = List.all .isDone group.units }
             )
         |> Common.list

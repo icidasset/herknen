@@ -1,4 +1,4 @@
-module Group exposing (Group, Icon, decoder, default, encode, iconFromString, icons, materialIcon, new, temporary)
+module Group exposing (Group, Icon, decoder, default, encode, findGroupAndIndexByLabel, iconFromString, icons, markAllAsDone, materialIcon, new, temporary)
 
 import Dict exposing (Dict)
 import Json.Decode
@@ -20,9 +20,9 @@ type alias Group =
     -----------------------------------------
     -- Internal
     -----------------------------------------
+    , gestureTarget : Maybe { x : Float, y : Float }
     , isDone : Bool
     , isEditing : Bool
-    , isGestureTarget : Bool
     , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
@@ -40,9 +40,9 @@ new =
     , units = []
 
     --
+    , gestureTarget = Nothing
     , isDone = False
     , isEditing = True
-    , isGestureTarget = False
     , isLoading = False
     , isNew = True
     , oldLabel = ""
@@ -56,9 +56,9 @@ temporary label =
     , units = []
 
     --
+    , gestureTarget = Nothing
     , isDone = False
     , isEditing = False
-    , isGestureTarget = False
     , isLoading = True
     , isNew = False
     , oldLabel = label
@@ -93,9 +93,9 @@ decoder =
             , units = units
 
             --
+            , gestureTarget = Nothing
             , isDone = False
             , isEditing = False
-            , isGestureTarget = False
             , isLoading = False
             , isNew = False
             , oldLabel = label
@@ -128,9 +128,37 @@ iconToString (Icon key) =
     key
 
 
+markAllAsDone : Group -> Group
+markAllAsDone group =
+    { group | units = List.map (\u -> { u | isDone = True }) group.units }
+
+
 materialIcon : Icon -> Material.Icon msg
 materialIcon (Icon key) =
     icons
         |> Dict.get key
         |> Maybe.map Tuple.second
         |> Maybe.withDefault default.material
+
+
+
+-- 🔬
+
+
+findGroupAndIndexByLabel : String -> List Group -> Maybe { index : Int, group : Group }
+findGroupAndIndexByLabel label groups =
+    findGroupAndIndexByLabel_ label -1 groups
+
+
+findGroupAndIndexByLabel_ : String -> Int -> List Group -> Maybe { index : Int, group : Group }
+findGroupAndIndexByLabel_ label counter groups =
+    case groups of
+        [] ->
+            Nothing
+
+        group :: rest ->
+            if group.label == label then
+                Just { index = counter + 1, group = group }
+
+            else
+                findGroupAndIndexByLabel_ label (counter + 1) rest

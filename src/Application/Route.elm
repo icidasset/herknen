@@ -12,7 +12,7 @@ import Url.Parser exposing (..)
 
 type Route
     = Index
-    | Group { index : Maybe Int, label : String } (Maybe Group)
+    | Group { label : String } (Maybe { index : Int, group : Group })
     | NotFound
 
 
@@ -35,8 +35,8 @@ fromUrl url =
 group : Route -> Maybe Group
 group r =
     case r of
-        Group _ maybe ->
-            maybe
+        Group _ (Just a) ->
+            Just a.group
 
         _ ->
             Nothing
@@ -45,8 +45,8 @@ group r =
 units : Route -> List Unit
 units r =
     case r of
-        Group _ (Just g) ->
-            g.units
+        Group _ (Just a) ->
+            a.group.units
 
         _ ->
             []
@@ -63,9 +63,7 @@ route =
         , map
             (\label ->
                 Group
-                    { index = Nothing
-                    , label = Maybe.withDefault label (Url.percentDecode label)
-                    }
+                    { label = Maybe.withDefault label (Url.percentDecode label) }
                     Nothing
             )
             (s "group" </> string)

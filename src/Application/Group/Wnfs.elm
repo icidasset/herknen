@@ -161,8 +161,8 @@ fetchNext model =
                 Route.Group ({ label } as a) Nothing ->
                     model.groups
                         |> RemoteData.withDefault []
-                        |> List.find (.label >> (==) label)
-                        |> (\maybeGroup -> { model | route = Route.Group a maybeGroup })
+                        |> Group.findGroupAndIndexByLabel label
+                        |> (\maybe -> { model | route = Route.Group a maybe })
                         |> Return.singleton
 
                 _ ->
