@@ -6,6 +6,7 @@ import Group
 import Group.Wnfs
 import Html.Events.Extra.Pointer as Pointer
 import List.Extra as List
+import Ports
 import Radix exposing (..)
 import RemoteData
 import Return exposing (return)
@@ -14,6 +15,7 @@ import Tag
 import Unit
 import Unit.State
 import Url exposing (Url)
+import Webnative
 import Wnfs
 
 
@@ -21,7 +23,18 @@ import Wnfs
 -- 📣
 
 
-gotWnfsResponse : Wnfs.Response -> Manager
+authenticate : Manager
+authenticate model =
+    { app = Just appPermissions
+    , fs = Nothing
+    }
+        |> Just
+        |> Webnative.redirectToLobby Webnative.CurrentUrl
+        |> Ports.webnativeRequest
+        |> return model
+
+
+gotWnfsResponse : Webnative.Response -> Manager
 gotWnfsResponse response =
     case Wnfs.decodeResponse Tag.parse response of
         Ok ( Tag.Group tag, artifact ) ->

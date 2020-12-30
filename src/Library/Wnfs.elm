@@ -1,10 +1,11 @@
-module Wnfs exposing (AppPermissions, Artifact(..), Attributes, Base(..), DecodedResponse, Entry, Kind(..), Request, Response, add, cat, decodeResponse, exists, ls, mkdir, mv, publish, read, readUtf8, rm, write, writeUtf8)
+module Wnfs exposing (Artifact(..), Attributes, Base(..), Entry, Kind(..), add, cat, decodeResponse, exists, ls, mkdir, mv, publish, read, readUtf8, rm, write, writeUtf8)
 
 import Bytes exposing (Bytes)
 import Bytes.Encode
 import Dict
 import Json.Decode
 import Json.Encode as Json
+import Webnative exposing (AppPermissions, Request, Response)
 import Wnfs.Internal exposing (..)
 
 
@@ -33,20 +34,10 @@ type Kind
     | File
 
 
-type alias AppPermissions =
-    { creator : String
-    , name : String
-    }
-
-
 type alias Attributes =
     { path : List String
     , tag : String
     }
-
-
-type alias DecodedResponse tag =
-    ( tag, Artifact )
 
 
 type alias Entry =
@@ -54,22 +45,6 @@ type alias Entry =
     , name : String
     , kind : Kind
     , size : Int
-    }
-
-
-type alias Request =
-    { tag : String
-    , method : String
-    , path : String
-    , arguments : List Json.Value
-    }
-
-
-type alias Response =
-    { tag : String
-    , method : String
-    , path : String
-    , data : Json.Value
     }
 
 
@@ -104,8 +79,10 @@ mv : Base -> { from : List String, to : List String, tag : String } -> Request
 mv base { from, to, tag } =
     { tag = tag
     , method = methodToString Mv
-    , path = buildPath base from
-    , arguments = [ Json.string (buildPath base to) ]
+    , arguments =
+        [ Json.string (buildPath base from)
+        , Json.string (buildPath base to)
+        ]
     }
 
 
@@ -113,7 +90,6 @@ publish : Request
 publish =
     { tag = ""
     , method = methodToString Publish
-    , path = ""
     , arguments = []
     }
 
@@ -150,7 +126,7 @@ writeUtf8 a b c =
 -- 📰
 
 
-decodeResponse : (String -> Result String a) -> Response -> Result String (DecodedResponse a)
+decodeResponse : (String -> Result String tag) -> Response -> Result String ( tag, Artifact )
 decodeResponse tagParser response =
     case methodFromString response.method of
         Nothing ->
@@ -220,8 +196,7 @@ makeRequest : Method -> Base -> List String -> String -> List Json.Value -> Requ
 makeRequest method base segments tag arguments =
     { tag = tag
     , method = methodToString method
-    , path = buildPath base segments
-    , arguments = arguments
+    , arguments = Json.string (buildPath base segments) :: arguments
     }
 
 

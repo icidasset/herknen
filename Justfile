@@ -26,6 +26,14 @@ dist := "build"
 		src/Application/Main.elm
 
 
+@elm-production:
+	echo "🌳  Compiling Elm (production)"
+	elm make \
+		--optimize \
+		--output {{dist}}/application.js \
+		src/Application/Main.elm
+
+
 @fonts:
 	echo "🔤  Copying fonts"
 	mkdir -p {{dist}}/fonts/

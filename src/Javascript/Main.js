@@ -52,22 +52,29 @@ wn.initialise({ permissions: PERMISSIONS })
       setTimeout(focusOnTextInput, 250)
     })
 
+    app.ports.webnativeRequest.subscribe(async request => {
+      webnative[request.method](
+        ...request.arguments
+      )
+    })
+
     app.ports.wnfsRequest.subscribe(async request => {
       console.log(request)
 
       if (request.method === "write") {
-        request.arguments = [Uint8Array.from(request.arguments[0])]
+        request.arguments = [
+          request.arguments[0],
+          Uint8Array.from(request.arguments[1])
+        ]
       }
 
       const data = await fs[request.method.replace(/_utf8$/, "")](
-        request.path,
         ...request.arguments
       )
 
       app.ports.wnfsResponse.send({
         tag: request.tag,
         method: request.method,
-        path: request.path,
         data: data.root ? null : (data.buffer ? Array.from(data) : data)
       })
     })

@@ -129,6 +129,9 @@ update msg =
         -----------------------------------------
         -- 🦉
         -----------------------------------------
+        Authenticate ->
+            Other.authenticate
+
         GotWnfsResponse a ->
             Other.gotWnfsResponse a
 

@@ -7,7 +7,7 @@ import Html.Events.Extra.Pointer as Pointer
 import RemoteData exposing (RemoteData)
 import Route exposing (Route)
 import Url exposing (Url)
-import Wnfs
+import Webnative
 
 
 
@@ -31,7 +31,7 @@ type alias Model =
     }
 
 
-appPermissions : Wnfs.AppPermissions
+appPermissions : Webnative.AppPermissions
 appPermissions =
     { creator = "icidasset"
     , name = "Herknen"
@@ -67,7 +67,8 @@ type Msg
       -----------------------------------------
       -- 🦉
       -----------------------------------------
-    | GotWnfsResponse Wnfs.Response
+    | Authenticate
+    | GotWnfsResponse Webnative.Response
     | Initialise { authenticated : Bool }
     | PointerDown Pointer.Event
     | PointerUp Pointer.Event
