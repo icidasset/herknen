@@ -59,7 +59,7 @@ initPartDeux { authenticated } model =
     if authenticated then
         return
             { model | groups = Loading }
-            Group.Wnfs.index
+            Group.Wnfs.ensureIndex
 
     else
         Return.singleton { model | groups = NotAsked }

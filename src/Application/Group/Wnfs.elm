@@ -27,6 +27,24 @@ base =
 -- 📣
 
 
+createIndex : Cmd Msg
+createIndex =
+    { path = [ "Lists" ]
+    , tag = tag CreateIndex
+    }
+        |> Wnfs.mkdir base
+        |> Ports.wnfsRequest
+
+
+ensureIndex : Cmd Msg
+ensureIndex =
+    { path = [ "Lists" ]
+    , tag = tag EnsureIndex
+    }
+        |> Wnfs.exists base
+        |> Ports.wnfsRequest
+
+
 fetch : { label : String } -> Cmd Msg
 fetch { label } =
     { path = [ "Lists", label ++ ".json" ]
@@ -83,6 +101,24 @@ remove group =
 manage : Group.Tag -> Wnfs.Artifact -> Manager
 manage t a model =
     case ( t, a ) of
+        -----------------------------------------
+        -- Create Index
+        -----------------------------------------
+        ( CreateIndex, _ ) ->
+            model
+                |> Return.singleton
+                |> Return.command index
+                |> Return.command (Ports.wnfsRequest Wnfs.publish)
+
+        -----------------------------------------
+        -- Ensure Index
+        -----------------------------------------
+        ( EnsureIndex, Wnfs.Boolean False ) ->
+            return model createIndex
+
+        ( EnsureIndex, Wnfs.Boolean True ) ->
+            return model index
+
         -----------------------------------------
         -- Fetch
         -----------------------------------------

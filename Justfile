@@ -18,6 +18,17 @@ dist := "build"
 		--output {{dist}}/application.css
 
 
+@css-small:
+	echo "💄  Minifying CSS"
+	NODE_ENV=production pnpx etc src/Css/Application.css \
+		--config src/Css/Tailwind.js \
+		--output {{dist}}/application.css \
+		\
+		--purge-content {{dist}}/**/*.html \
+		--purge-content {{dist}}/application.js \
+		--purge-content src/Library/Theme.elm
+
+
 @elm-dev:
 	echo "🌳  Compiling Elm"
 	elm make \
@@ -51,6 +62,18 @@ dist := "build"
 @javascript:
 	echo "🏗  Compiling javascript"
 	cp src/Javascript/Main.js {{dist}}/index.js
+
+
+@minify-js:
+	echo "🏗  Minifying javascript"
+	just min-js {{dist}}/application.js
+	just min-js {{dist}}/index.js
+
+
+@min-js path:
+	cat {{path}} | ./node_modules/.bin/esbuild --minify > {{path}}.tmp
+	rm {{path}}
+	mv {{path}}.tmp {{path}}
 
 
 @schemas:
@@ -87,6 +110,9 @@ dist := "build"
 
 @install-deps:
 	pnpm install
+
+
+@production-build: clean vendor schemas html elm-production javascript fonts css-small minify-js
 
 
 @watch:

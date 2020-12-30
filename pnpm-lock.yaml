@@ -3,6 +3,7 @@ dependencies:
   webnative: 0.21.1
 devDependencies:
   elm-tailwind-css: 1.1.1_tailwindcss@2.0.1
+  esbuild: 0.8.27
 lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.10.4:
@@ -686,6 +687,12 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-QCOllgZJtaUo9miYBcLChTUaHNjJF3PYs1VidD7AwiEj1kYxKeQTctLAezAOH5ZKRH0g2IgPn6KwB4IT8iRpvA==
+  /esbuild/0.8.27:
+    dev: true
+    hasBin: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-cY2i08EHYHNg0o748J+X0yBTcCO7DIZSxLWJ/6OymmML0Y2X6qkINfZcoiq5GE6EcLIfwyaZpI60JY6iBJWj5w==
   /escalade/3.1.1:
     dev: true
     engines:
@@ -2256,5 +2263,6 @@ packages:
       integrity: sha512-WOkpgNhPTlE73h4VFAFsOnomJVaovO8VqLDzy5saChRBFQFBoMYirowyW+Q9HB4HFF4Z7VZTiG3iSzJJA29yRA==
 specifiers:
   elm-tailwind-css: ^1.1.1
+  esbuild: ^0.8.27
   tailwindcss: ^2.0.1
   webnative: ^0.21.1

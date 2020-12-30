@@ -8,7 +8,9 @@ import Enum exposing (Enum)
 
 
 type Tag
-    = Fetch
+    = CreateIndex
+    | EnsureIndex
+    | Fetch
     | Index
     | Mutation
 
@@ -16,7 +18,9 @@ type Tag
 enum : Enum Tag
 enum =
     Enum.create
-        [ ( "Fetch", Fetch )
+        [ ( "CreateIndex", CreateIndex )
+        , ( "EnsureIndex", EnsureIndex )
+        , ( "Fetch", Fetch )
         , ( "Index", Index )
         , ( "Mutation", Mutation )
         ]

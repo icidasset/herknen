@@ -25,11 +25,11 @@ const app = Elm.Main.init({
 wn.setup.debug({ enabled: true })
 
 
-wn.setup.endpoints({
-  api: "https://runfission.net",
-  lobby: "https://auth.runfission.net",
-  user: "fissionuser.net"
-})
+// wn.setup.endpoints({
+//   api: "https://runfission.net",
+//   lobby: "https://auth.runfission.net",
+//   user: "fissionuser.net"
+// })
 
 
 
