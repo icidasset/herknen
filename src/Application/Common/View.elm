@@ -34,22 +34,6 @@ type alias Messages msg =
 -- 🌄
 
 
-index : List (Html msg) -> Html msg
-index =
-    Html.div
-        [ C.flex
-        , C.flex_col
-        , C.min_h_screen
-        , C.items_center
-        , C.w_full
-
-        -- Responsive
-        -------------
-        , C.sm__min_h_0
-        , C.sm__justify_center
-        ]
-
-
 create : { withBorder : Bool } -> List (Html.Attribute msg) -> Html msg
 create { withBorder } attributes =
     Html.button
@@ -59,6 +43,7 @@ create { withBorder } attributes =
          , C.items_center
          , C.p_5
          , C.rounded_full
+         , C.shadow_none
          , C.text_gray_400
          , C.transition_colors
 
@@ -75,7 +60,7 @@ create { withBorder } attributes =
 
                         -- Dark mode
                         ------------
-                        , C.border_gray_600
+                        , C.dark__border_gray_600
                         ]
 
                 else
@@ -85,6 +70,24 @@ create { withBorder } attributes =
         )
         [ Icons.add 22 Inherit
         ]
+
+
+emptyState : List (Html.Attribute msg) -> List (Html msg) -> Html msg
+emptyState attributes =
+    [ C.flex
+    , C.flex_1
+    , C.font_display
+    , C.italic
+    , C.items_center
+    , C.justify_center
+    , C.leading_relaxed
+    , C.opacity_50
+    , C.px_8
+    , C.py_5
+    , C.text_center
+    ]
+        |> List.append attributes
+        |> Html.div
 
 
 list : List (Html msg) -> Html msg
@@ -102,6 +105,23 @@ list =
         -- Responsive
         -------------
         , C.sm__max_w_xs
+        ]
+
+
+index : List (Html msg) -> Html msg
+index =
+    Html.div
+        [ C.flex
+        , C.flex_col
+        , C.h_full
+        , C.items_center
+        , C.overflow_y_auto
+        , C.w_full
+
+        -- Responsive
+        -------------
+        , C.sm__min_h_0
+        , C.sm__justify_center
         ]
 
 
@@ -131,10 +151,14 @@ item messages tag attributes idx it =
             |> A.class
 
         --
+        , A.style "touch-action" "none"
+
+        --
         , C.border_b
         , C.border_opacity_5
         , C.border_black
         , C.group
+        , C.overflow_x_hidden
         , C.pt_px
         , C.relative
         , C.transition_colors
@@ -151,6 +175,7 @@ item messages tag attributes idx it =
 
         -- Responsive
         -------------
+        , C.sm__overflow_x_auto
         , C.sm__first__rounded_t
         , C.sm__last__rounded_b
         ]
@@ -171,7 +196,7 @@ item messages tag attributes idx it =
                 , C.bg_transparent
                 , C.font_body
                 , C.px_4
-                , C.py_3
+                , C.py_4
                 , C.tracking_wide
                 , C.w_full
 
@@ -184,7 +209,7 @@ item messages tag attributes idx it =
             tag
                 ([ C.block
                  , C.px_4
-                 , C.py_3
+                 , C.py_4
                  , C.rounded
                  , C.tracking_wide
 

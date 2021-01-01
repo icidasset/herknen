@@ -8,6 +8,7 @@ import Group.State as Group
 import Group.View as Group
 import Group.Wnfs
 import Html exposing (Html)
+import Html.Attributes as A
 import Html.Events.Extra.Pointer as Pointer
 import Loaders
 import Other.State as Other
@@ -175,6 +176,7 @@ container : Model -> Html Msg
 container model =
     Html.section
         [ Pointer.onUp PointerUp
+        , A.style "touch-action" "pan-y"
 
         --
         , Pointer.onWithOptions "pointerdown"
@@ -185,9 +187,10 @@ container model =
 
         --
         , C.flex
+        , C.h_full
         , C.items_center
         , C.justify_center
-        , C.min_h_screen
+        , C.overflow_y_auto
         , C.select_none
         ]
         [ case model.groups of

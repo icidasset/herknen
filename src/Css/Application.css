@@ -17,6 +17,13 @@
 }
 
 
+html, body {
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+
 body {
   @apply bg-gray-50 font-body font-normal text-gray-900;
   @apply dark:bg-gray-900 dark:text-gray-200;

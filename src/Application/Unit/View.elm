@@ -40,7 +40,7 @@ index group =
                 , C.pb_6
                 , C.pt_8
                 , C.px_5
-                , C.text_lg
+                , C.text_xl
 
                 -- Responsive
                 -------------
@@ -53,11 +53,20 @@ index group =
         , listView group.units
 
         --
-        , Common.create
-            { withBorder = List.isEmpty group.units }
-            [ A.title "Add something to the list"
-            , E.onClick CreateUnit
-            ]
+        , if List.isEmpty group.units then
+            Common.emptyState
+                [ E.onClick CreateUnit ]
+                [ Html.text "All done, tap the screen to add"
+                , Html.br [] []
+                , Html.text "something to the list."
+                ]
+
+          else
+            Common.create
+                { withBorder = List.isEmpty group.units }
+                [ A.title "Add something to the list"
+                , E.onClick CreateUnit
+                ]
         ]
 
 

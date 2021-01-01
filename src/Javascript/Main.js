@@ -94,3 +94,21 @@ function focusOnTextInput() {
   const element = document.querySelector("input[type=\"text\"]")
   if (element) element.focus()
 }
+
+
+
+// Vertical Height
+// ---------------
+
+setVerticalHeightUnit()
+
+
+window.addEventListener("resize", () => {
+  setTimeout(setVerticalHeightUnit, 0)
+})
+
+
+function setVerticalHeightUnit() {
+  const vh = document.documentElement.clientHeight * 0.01
+  document.documentElement.style.setProperty("--vh", `${vh}px`)
+}

@@ -21,11 +21,20 @@ index groups =
         [ listView groups
 
         --
-        , Common.create
-            { withBorder = List.isEmpty groups }
-            [ A.title "Create a new list"
-            , E.onClick CreateGroup
-            ]
+        , if List.isEmpty groups then
+            Common.emptyState
+                [ E.onClick CreateGroup ]
+                [ Html.text "Tap the screen"
+                , Html.br [] []
+                , Html.text "to make a new list."
+                ]
+
+          else
+            Common.create
+                { withBorder = List.isEmpty groups }
+                [ A.title "Create a new list"
+                , E.onClick CreateGroup
+                ]
         ]
 
 

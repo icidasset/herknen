@@ -2,7 +2,9 @@ module Other.State exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
+import Common.Item
 import Group
+import Group.State
 import Group.Wnfs
 import Html.Events.Extra.Pointer as Pointer
 import List.Extra as List
@@ -59,12 +61,18 @@ pointerUp event m =
     let
         model =
             { m | pointerStartCoordinates = Nothing }
+
+        ( endX, endY ) =
+            event.pointer.pagePos
     in
     case model.route of
+        -----------------------------------------
+        -- Group
+        -----------------------------------------
         Route.Group attr (Just { index, group }) ->
             let
                 maybeStart =
-                    Unit.findGestureTargetWithIndex group.units
+                    Common.Item.findGestureTargetWithIndex group.units
 
                 updatedUnits =
                     List.map (\u -> { u | gestureTarget = Nothing }) group.units
@@ -78,9 +86,6 @@ pointerUp event m =
 
                 updatedModel =
                     { model | route = updatedRoute }
-
-                ( endX, endY ) =
-                    event.pointer.pagePos
             in
             case ( maybeStart, m.pointerStartCoordinates ) of
                 ( Just start, _ ) ->
@@ -90,11 +95,11 @@ pointerUp event m =
                             , endY - start.coordinates.y
                             )
                     in
-                    if diffX <= -100 && abs diffY < 50 then
+                    if diffX <= -100 && abs diffY <= 100 then
                         -- Swipe left
                         Unit.State.complete { index = start.index } updatedModel
 
-                    else if diffX >= 100 && abs diffY < 50 then
+                    else if diffX >= 100 && abs diffY <= 100 then
                         -- Swipe right
                         Unit.State.remove { index = start.index } updatedModel
 
@@ -109,11 +114,11 @@ pointerUp event m =
                             , endY - y
                             )
                     in
-                    if abs diffX < 50 && diffY >= 150 then
+                    if abs diffX <= 100 && diffY >= 150 then
                         -- Swipe up
                         Return.singleton { updatedModel | route = Route.Index }
 
-                    else if abs diffX < 50 && diffY <= -150 then
+                    else if abs diffX <= 100 && diffY <= -150 then
                         -- Swipe down
                         Unit.State.create updatedModel
 
@@ -124,6 +129,69 @@ pointerUp event m =
                 _ ->
                     Return.singleton updatedModel
 
+        -----------------------------------------
+        -- Index
+        -----------------------------------------
+        Route.Index ->
+            let
+                maybeStart =
+                    model.groups
+                        |> RemoteData.toMaybe
+                        |> Maybe.andThen Common.Item.findGestureTargetWithIndex
+
+                updatedGroups =
+                    (\g -> { g | gestureTarget = Nothing })
+                        |> List.map
+                        |> RemoteData.map
+
+                updatedModel =
+                    { model | groups = updatedGroups model.groups }
+            in
+            case ( maybeStart, m.pointerStartCoordinates ) of
+                ( Just start, _ ) ->
+                    let
+                        ( diffX, diffY ) =
+                            ( endX - start.coordinates.x
+                            , endY - start.coordinates.y
+                            )
+                    in
+                    if diffX <= -100 && abs diffY <= 100 then
+                        -- Swipe left
+                        Group.State.complete { index = start.index } updatedModel
+
+                    else if diffX >= 100 && abs diffY <= 100 then
+                        -- Swipe right
+                        Group.State.remove { index = start.index } updatedModel
+
+                    else
+                        -- 🛑
+                        Return.singleton updatedModel
+
+                ( _, Just { x, y } ) ->
+                    let
+                        ( diffX, diffY ) =
+                            ( endX - x
+                            , endY - y
+                            )
+                    in
+                    if abs diffX <= 100 && diffY >= 150 then
+                        -- Swipe up
+                        Return.singleton updatedModel
+
+                    else if abs diffX <= 100 && diffY <= -150 then
+                        -- Swipe down
+                        Group.State.create updatedModel
+
+                    else
+                        -- 🛑
+                        Return.singleton updatedModel
+
+                _ ->
+                    Return.singleton updatedModel
+
+        -----------------------------------------
+        -- 🦉
+        -----------------------------------------
         _ ->
             Return.singleton model
 
