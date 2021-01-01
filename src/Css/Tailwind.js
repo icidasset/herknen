@@ -7,7 +7,7 @@ export default {
 
     fontFamily: {
       body: [ "Heebo" ],
-      display: [ "Libre Baskerville" ]
+      display: [ "Old Standard TT", "Libre Baskerville" ]
     },
 
 

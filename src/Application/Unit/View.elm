@@ -35,12 +35,13 @@ index group =
             ]
             [ Html.h1
                 [ C.antialiased
+                , C.font_bold
                 , C.font_display
-                , C.italic
                 , C.pb_6
                 , C.pt_8
                 , C.px_5
                 , C.text_xl
+                , C.tracking_tighter
 
                 -- Responsive
                 -------------
