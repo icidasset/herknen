@@ -85,6 +85,10 @@ emptyState attributes =
     , C.px_8
     , C.py_5
     , C.text_center
+
+    -- Responsive
+    -------------
+    , C.sm__flex_grow_0
     ]
         |> List.append attributes
         |> Html.div
@@ -175,7 +179,7 @@ item messages tag attributes idx it =
 
         -- Responsive
         -------------
-        , C.sm__overflow_x_auto
+        , C.sm__overflow_x_visible
         , C.sm__first__rounded_t
         , C.sm__last__rounded_b
         ]
@@ -202,6 +206,10 @@ item messages tag attributes idx it =
 
                 --
                 , C.focus__outline_none
+
+                -- Responsive
+                -------------
+                , C.sm__py_3
                 ]
                 []
 
@@ -219,6 +227,10 @@ item messages tag attributes idx it =
                  , C.focus__ring_offset_gray_900
                  , C.focus__ring_offset_4
                  , C.focus__ring_gray_400
+
+                 -- Responsive
+                 -------------
+                 , C.sm__py_3
                  ]
                     |> (if it.isLoading then
                             identity

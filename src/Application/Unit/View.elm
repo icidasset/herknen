@@ -45,6 +45,7 @@ index group =
                 -- Responsive
                 -------------
                 , C.sm__mt_0
+                , C.sm__text_base
                 ]
                 [ Html.text group.label ]
             ]
@@ -55,10 +56,18 @@ index group =
         --
         , if List.isEmpty group.units then
             Common.emptyState
-                [ E.onClick CreateUnit ]
-                [ Html.text "All done, tap the screen to add"
-                , Html.br [] []
-                , Html.text "something to the list."
+                [ E.onClick CreateUnit
+                , C.cursor_pointer
+                ]
+                [ Html.p
+                    []
+                    [ Html.text "All done, "
+                    , Html.span [ C.sm__hidden ] [ Html.text "tap the screen" ]
+                    , Html.span [ C.hidden, C.sm__inline ] [ Html.text "click here" ]
+                    , Html.text " to add"
+                    , Html.br [] []
+                    , Html.text "something to the list."
+                    ]
                 ]
 
           else
