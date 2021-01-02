@@ -5,6 +5,7 @@ import Group.Tag as Group exposing (Tag(..))
 import Json.Decode
 import Json.Encode
 import List.Extra as List
+import Maybe.Extra as Maybe
 import Ports
 import Radix exposing (..)
 import RemoteData exposing (RemoteData(..))
@@ -206,7 +207,8 @@ fetchNext model =
                     model.groups
                         |> RemoteData.withDefault []
                         |> Group.findGroupAndIndexByLabel label
-                        |> (\maybe -> { model | route = Route.Group a maybe })
+                        |> Maybe.unwrap Route.Index (Just >> Route.Group a)
+                        |> (\route -> { model | route = route })
                         |> Return.singleton
 
                 _ ->
