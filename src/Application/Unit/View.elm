@@ -46,7 +46,6 @@ index group =
                 -- Responsive
                 -------------
                 , C.sm__mt_0
-                , C.sm__text_lg
                 ]
                 [ Html.text group.label ]
             ]

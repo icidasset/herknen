@@ -80,11 +80,11 @@ emptyState attributes =
     , C.italic
     , C.items_center
     , C.justify_center
-    , C.leading_relaxed
     , C.opacity_50
     , C.px_8
     , C.py_5
     , C.text_center
+    , C.text_lg
 
     -- Responsive
     -------------

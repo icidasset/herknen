@@ -23,10 +23,16 @@ index groups =
         --
         , if List.isEmpty groups then
             Common.emptyState
-                [ E.onClick CreateGroup ]
-                [ Html.text "Tap the screen"
-                , Html.br [] []
-                , Html.text "to make a new list."
+                [ E.onClick CreateGroup
+                , C.cursor_pointer
+                ]
+                [ Html.p
+                    []
+                    [ Html.span [ C.sm__hidden ] [ Html.text "Tap the screen" ]
+                    , Html.span [ C.hidden, C.sm__inline ] [ Html.text "Click here" ]
+                    , Html.br [] []
+                    , Html.text "to make your first list."
+                    ]
                 ]
 
           else
