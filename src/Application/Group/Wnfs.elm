@@ -129,17 +129,25 @@ manage t a model =
                 |> Json.Decode.decodeString Group.decoder
                 |> Result.map
                     (\group ->
-                        (RemoteData.map << List.map)
-                            (\g ->
-                                if g.label == group.label then
-                                    group
-
-                                else
-                                    g
+                        RemoteData.map
+                            (\groups ->
+                                groups
+                                    |> List.findIndex .isLoading
+                                    |> Maybe.map (\idx -> List.setAt idx group groups)
+                                    |> Maybe.withDefault groups
                             )
                             model.groups
                     )
-                |> Result.withDefault model.groups
+                |> Result.withDefault
+                    (RemoteData.map
+                        (\groups ->
+                            groups
+                                |> List.findIndex .isLoading
+                                |> Maybe.map (\idx -> List.removeAt idx groups)
+                                |> Maybe.withDefault groups
+                        )
+                        model.groups
+                    )
                 |> (\remoteData -> { model | groups = remoteData })
                 |> fetchNext
 
