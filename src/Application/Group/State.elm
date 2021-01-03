@@ -38,6 +38,17 @@ create =
     Common.create config
 
 
+createExample : Manager
+createExample model =
+    let
+        example =
+            Group.example
+    in
+    { model | groups = Success [ example ] }
+        |> Return.singleton
+        |> Return.command (Group.Wnfs.persist example)
+
+
 complete : { index : Int } -> Manager
 complete { index } model =
     model

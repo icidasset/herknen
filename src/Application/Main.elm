@@ -85,6 +85,9 @@ update msg =
         CompleteGroup a ->
             Group.complete a
 
+        CreateExampleGroup ->
+            Group.createExample
+
         CreateGroup ->
             Group.create
 

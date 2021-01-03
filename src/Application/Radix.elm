@@ -48,6 +48,7 @@ type Msg
       -- Group
       -----------------------------------------
     | CompleteGroup { index : Int }
+    | CreateExampleGroup
     | CreateGroup
     | EditGroup { index : Int }
     | FinishedEditingGroup { index : Int, save : Bool }

@@ -12,6 +12,7 @@ import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
 import Route
 import Tag
+import Task
 import Wnfs
 
 
@@ -108,7 +109,7 @@ manage t a model =
         ( CreateIndex, _ ) ->
             model
                 |> Return.singleton
-                |> Return.command index
+                |> Return.command (Task.attempt (always CreateExampleGroup) (Task.succeed ()))
                 |> Return.command (Ports.wnfsRequest Wnfs.publish)
 
         -----------------------------------------

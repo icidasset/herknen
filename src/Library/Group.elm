@@ -1,4 +1,4 @@
-module Group exposing (Group, Icon, decoder, default, encode, findGroupAndIndexByLabel, iconFromString, icons, markAllAsDone, materialIcon, new, temporary)
+module Group exposing (Group, Icon, decoder, default, encode, example, findGroupAndIndexByLabel, iconFromString, icons, markAllAsDone, materialIcon, new, temporary)
 
 import Dict exposing (Dict)
 import Json.Decode
@@ -31,6 +31,21 @@ type alias Group =
 
 type Icon
     = Icon String
+
+
+example : Group
+example =
+    let
+        unit =
+            Unit.new
+    in
+    { new
+        | label = "Shopping List"
+        , units =
+            [ { unit | label = "Bread" }
+            , { unit | label = "Butter" }
+            ]
+    }
 
 
 new : Group
