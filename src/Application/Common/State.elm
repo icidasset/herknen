@@ -80,20 +80,20 @@ finishedEditing config { index, save } model =
                             label =
                                 String.trim i.label
 
-                            group =
-                                { i | isEditing = False, label = label }
+                            item =
+                                { i | isEditing = False, label = label, isNew = False }
                         in
                         acc
-                            |> (if i.isNew then
+                            |> (if String.isEmpty label then
                                     identity
 
                                 else
-                                    (::) group
+                                    (::) item
                                )
                             |> (\a ->
                                     ( a
                                     , if label /= i.oldLabel then
-                                        Just group
+                                        Just item
 
                                       else
                                         Nothing
@@ -180,7 +180,7 @@ startGesture config { index } event model =
 updateLabel : Config item -> { index : Int } -> String -> Manager
 updateLabel config { index } newLabel model =
     model
-        |> adjustItemWithIndex config index (\i -> { i | label = newLabel, isNew = False })
+        |> adjustItemWithIndex config index (\i -> { i | label = newLabel })
         |> Return.singleton
 
 

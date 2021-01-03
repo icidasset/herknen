@@ -38,6 +38,7 @@ create : { withBorder : Bool } -> List (Html.Attribute msg) -> Html msg
 create { withBorder } attributes =
     Html.button
         ([ C.appearance_none
+         , C.bg_transparent
          , C.cursor_pointer
          , C.flex
          , C.items_center
@@ -94,24 +95,6 @@ emptyState attributes =
         |> Html.div
 
 
-list : List (Html msg) -> Html msg
-list =
-    Html.ol
-        [ Theme.default.container
-            |> Theme.mergeClasses
-            |> A.class
-
-        --
-        , C.rounded
-        , C.shadow_md
-        , C.w_full
-
-        -- Responsive
-        -------------
-        , C.sm__max_w_xs
-        ]
-
-
 index : List (Html msg) -> Html msg
 index =
     Html.div
@@ -165,6 +148,7 @@ item messages tag attributes idx it =
         , C.overflow_x_hidden
         , C.pt_px
         , C.relative
+        , C.select_auto
         , C.transition_colors
 
         --
@@ -285,6 +269,28 @@ item messages tag attributes idx it =
             ]
             [ Icons.done 18 Inherit ]
         ]
+
+
+list : List (Html msg) -> Html msg
+list =
+    Html.ol
+        [ Theme.default.container
+            |> Theme.mergeClasses
+            |> A.class
+
+        --
+        , C.rounded
+        , C.shadow_md
+        , C.w_full
+
+        -- Responsive
+        -------------
+        , C.sm__max_w_xs
+        ]
+
+
+
+-- ㊙️
 
 
 action : List (Html.Attribute msg) -> List (Html msg) -> Html msg

@@ -32,6 +32,10 @@ wn.setup.debug({ enabled: true })
 // })
 
 
+// Allows for the blur event on input elements on iOS
+document.body.addEventListener("click", () => {})
+
+
 
 // 🚀
 
@@ -50,6 +54,7 @@ wn.initialise({ permissions: PERMISSIONS })
       setTimeout(focusOnTextInput, 0)
       setTimeout(focusOnTextInput, 50)
       setTimeout(focusOnTextInput, 250)
+      setTimeout(focusOnTextInput, 500)
     })
 
     app.ports.webnativeRequest.subscribe(async request => {
