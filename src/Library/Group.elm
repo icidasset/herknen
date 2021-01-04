@@ -36,8 +36,11 @@ type Icon
 example : Group
 example =
     let
-        unit =
+        newUnit =
             Unit.new
+
+        unit =
+            { newUnit | isEditing = False, isNew = False }
     in
     { new
         | label = "Shopping List"
@@ -45,6 +48,10 @@ example =
             [ { unit | label = "Bread" }
             , { unit | label = "Butter" }
             ]
+
+        --
+        , isEditing = False
+        , isNew = False
     }
 
 
