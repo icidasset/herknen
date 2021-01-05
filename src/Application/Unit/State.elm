@@ -1,5 +1,6 @@
 module Unit.State exposing (..)
 
+import Bounce
 import Common.State as Common
 import Group exposing (Group)
 import Group.Wnfs exposing (sort)
@@ -27,7 +28,7 @@ config =
                 Route.Group attr (Just { index, group }) ->
                     let
                         updatedGroup =
-                            { group | units = units }
+                            { group | units = units, persisted = False }
 
                         updatedRoute =
                             Route.Group attr (Just { index = index, group = updatedGroup })
@@ -54,18 +55,17 @@ config =
     , sorter = identity
 
     --
-    , move = \m _ -> groupCmd Group.Wnfs.persist m
-    , persist = \m _ -> groupCmd Group.Wnfs.persist m
-    , remove = \m _ -> groupCmd Group.Wnfs.persist m
+    , move = \m _ -> persistGroupsMomentarily m
+    , persist = \m _ -> persistGroupsMomentarily m
+    , remove = \m _ -> persistGroupsMomentarily m
     }
 
 
-groupCmd : (Group -> Cmd Msg) -> Model -> Cmd Msg
-groupCmd cmdFn model =
-    model.route
-        |> Route.group
-        |> Maybe.map cmdFn
-        |> Maybe.withDefault Cmd.none
+persistGroupsMomentarily : Manager
+persistGroupsMomentarily model =
+    return
+        { model | groupsBounce = Bounce.push model.groupsBounce }
+        (Bounce.delay 3000 PersistGroupsIfSteady)
 
 
 
@@ -84,8 +84,7 @@ complete { index } model =
             config
             index
             (\unit -> { unit | isDone = not unit.isDone })
-        |> Return.singleton
-        |> Return.effect_ (groupCmd Group.Wnfs.persist)
+        |> persistGroupsMomentarily
 
 
 edit : { index : Int } -> Manager

@@ -26,6 +26,7 @@ type alias Group =
     , isLoading : Bool
     , isNew : Bool
     , oldLabel : String
+    , persisted : Bool
     }
 
 
@@ -68,6 +69,7 @@ new =
     , isLoading = False
     , isNew = True
     , oldLabel = ""
+    , persisted = True
     }
 
 
@@ -84,6 +86,7 @@ temporary label =
     , isLoading = True
     , isNew = False
     , oldLabel = label
+    , persisted = True
     }
 
 
@@ -121,6 +124,7 @@ decoder =
             , isLoading = False
             , isNew = False
             , oldLabel = label
+            , persisted = True
             }
         )
         (Json.Decode.field "icon" Json.Decode.string)

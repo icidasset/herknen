@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Bounce
 import Browser
 import Browser.Navigation
 import Css.Classes as C
@@ -47,6 +48,7 @@ init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init _ url navKey =
     return
         { groups = Loading
+        , groupsBounce = Bounce.init
         , navKey = navKey
         , pointerStartCoordinates = Nothing
         , route = Route.fromUrl url
@@ -96,6 +98,9 @@ update msg =
 
         FinishedEditingGroup a ->
             Group.finishedEditing a
+
+        PersistGroupsIfSteady ->
+            Group.persistIfSteady
 
         RemoveGroup a ->
             Group.remove a

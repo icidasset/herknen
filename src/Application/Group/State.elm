@@ -1,5 +1,6 @@
 module Group.State exposing (..)
 
+import Bounce
 import Common.State as Common
 import Group exposing (Group)
 import Group.Wnfs exposing (sort)
@@ -23,9 +24,9 @@ config =
     , sorter = sort
 
     --
-    , move = always Group.Wnfs.move
-    , persist = always Group.Wnfs.persist
-    , remove = always Group.Wnfs.remove
+    , move = \m -> Group.Wnfs.move >> return m
+    , persist = \m -> Group.Wnfs.persist >> return m
+    , remove = \m -> Group.Wnfs.remove >> return m
     }
 
 
@@ -75,6 +76,35 @@ edit =
 finishedEditing : { index : Int, save : Bool } -> Manager
 finishedEditing =
     Common.finishedEditing config
+
+
+persistIfSteady : Manager
+persistIfSteady model =
+    let
+        newBounce =
+            Bounce.pop model.groupsBounce
+
+        groups =
+            if Bounce.steady newBounce then
+                RemoteData.map
+                    (List.map (\group -> { group | persisted = True }))
+                    model.groups
+
+            else
+                model.groups
+    in
+    return
+        { model | groups = groups, groupsBounce = newBounce }
+        (if Bounce.steady newBounce then
+            model.groups
+                |> RemoteData.withDefault []
+                |> List.filter (.persisted >> (==) False)
+                |> List.map Group.Wnfs.persist
+                |> Cmd.batch
+
+         else
+            Cmd.none
+        )
 
 
 remove : { index : Int } -> Manager

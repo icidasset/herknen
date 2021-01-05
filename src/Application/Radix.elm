@@ -1,5 +1,6 @@
 module Radix exposing (..)
 
+import Bounce exposing (Bounce)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import Group exposing (Group)
@@ -24,6 +25,7 @@ type alias Flags =
 
 type alias Model =
     { groups : RemoteData String (List Group)
+    , groupsBounce : Bounce
     , navKey : Nav.Key
     , pointerStartCoordinates : Maybe { x : Float, y : Float }
     , route : Route
@@ -52,6 +54,7 @@ type Msg
     | CreateGroup
     | EditGroup { index : Int }
     | FinishedEditingGroup { index : Int, save : Bool }
+    | PersistGroupsIfSteady
     | RemoveGroup { index : Int }
     | StartGroupGesture { index : Int } Pointer.Event
     | UpdateGroupLabel { index : Int } String

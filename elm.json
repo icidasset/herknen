@@ -21,6 +21,7 @@
             "elm/url": "1.0.0",
             "elm-community/list-extra": "8.2.4",
             "elm-community/maybe-extra": "5.2.0",
+            "grotsev/elm-debouncer": "1.0.0",
             "icidasset/elm-material-icons": "5.0.0",
             "jouderianjr/elm-loaders": "1.0.2",
             "krisajenkins/remotedata": "6.0.1",

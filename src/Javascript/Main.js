@@ -57,6 +57,7 @@ wn.initialise({ permissions: PERMISSIONS })
       setTimeout(focusOnTextInput, 500)
     })
 
+    // Webnative ports
     app.ports.webnativeRequest.subscribe(async request => {
       webnative[request.method](
         ...request.arguments
@@ -64,6 +65,8 @@ wn.initialise({ permissions: PERMISSIONS })
     })
 
     app.ports.wnfsRequest.subscribe(async request => {
+      const method = request.method.replace(/_utf8$/, "")
+
       console.log(request)
 
       if (request.method === "write") {
@@ -73,7 +76,7 @@ wn.initialise({ permissions: PERMISSIONS })
         ]
       }
 
-      const data = await fs[request.method.replace(/_utf8$/, "")](
+      const data = await fs[method](
         ...request.arguments
       )
 

@@ -20,9 +20,9 @@ type alias Config item =
 
     -- Commands
     -----------
-    , move : Model -> Item item -> Cmd Msg
-    , persist : Model -> Item item -> Cmd Msg
-    , remove : Model -> Item item -> Cmd Msg
+    , move : Model -> Item item -> ( Model, Cmd Msg )
+    , persist : Model -> Item item -> ( Model, Cmd Msg )
+    , remove : Model -> Item item -> ( Model, Cmd Msg )
     }
 
 
@@ -109,7 +109,7 @@ finishedEditing config { index, save } model =
                     |> config.sorter
                     |> config.setter model
                     |> Return.singleton
-                    |> Return.effect_
+                    |> Return.andThen
                         (\newModel ->
                             case ( save, changedItem ) of
                                 ( True, Just item ) ->
@@ -120,7 +120,7 @@ finishedEditing config { index, save } model =
                                         config.move newModel item
 
                                 _ ->
-                                    Cmd.none
+                                    Return.singleton newModel
                         )
            )
 
@@ -142,14 +142,14 @@ remove config { index } model =
                 items
                     |> config.setter model
                     |> Return.singleton
-                    |> Return.effect_
+                    |> Return.andThen
                         (\newModel ->
                             case maybeDeletedItem of
                                 Just deletedItem ->
                                     config.remove newModel deletedItem
 
                                 Nothing ->
-                                    Cmd.none
+                                    Return.singleton newModel
                         )
            )
 
