@@ -1,7 +1,6 @@
 port module Ports exposing (..)
 
 import Webnative
-import Wnfs
 
 
 

@@ -1,6 +1,7 @@
 dependencies:
   tailwindcss: 2.0.1
   webnative: 0.21.1
+  webnative-elm: 1.0.0_webnative@0.21.1
 devDependencies:
   elm-tailwind-css: 1.1.1_tailwindcss@2.0.1
   esbuild: 0.8.27
@@ -2218,6 +2219,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-26wEnRPEFAc5d5lmH1Q/DuvWEYsRF1D2alX2jlKpdmqv7cj+BbANL7Xlcl9r4s72Eg9kItZa9RWVbBMC9dMv4w==
+  /webnative-elm/1.0.0_webnative@0.21.1:
+    dependencies:
+      webnative: 0.21.1
+    dev: false
+    peerDependencies:
+      webnative: '> 0.0.0'
+    resolution:
+      integrity: sha512-kNAMAErc/NEKDm8hZOzplojMmsmF3v0syaLvd+ZGVr54kYRBCPAO/bdisn5zab5GexSsmHCy5fK6iGsd+DJ3Mg==
   /webnative/0.21.1:
     dependencies:
       base58-universal: 1.0.0
@@ -2266,3 +2275,4 @@ specifiers:
   esbuild: ^0.8.27
   tailwindcss: ^2.0.1
   webnative: ^0.21.1
+  webnative-elm: ^1.0.0

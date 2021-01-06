@@ -1,6 +1,6 @@
 {
   "name": "Herknen",
-  "description": "",
+  "description": "Make short, but important, lists",
   "version": "0.1.0",
   "author": "Steven Vandevelde <icid.asset@gmail.com>",
   "type": "module",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "tailwindcss": "^2.0.1",
-    "webnative": "^0.21.1"
+    "webnative": "^0.21.1",
+    "webnative-elm": "^1.0.0"
   }
 }

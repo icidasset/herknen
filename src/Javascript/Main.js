@@ -58,34 +58,7 @@ wn.initialise({ permissions: PERMISSIONS })
     })
 
     // Webnative ports
-    app.ports.webnativeRequest.subscribe(async request => {
-      webnative[request.method](
-        ...request.arguments
-      )
-    })
-
-    app.ports.wnfsRequest.subscribe(async request => {
-      const method = request.method.replace(/_utf8$/, "")
-
-      console.log(request)
-
-      if (request.method === "write") {
-        request.arguments = [
-          request.arguments[0],
-          Uint8Array.from(request.arguments[1])
-        ]
-      }
-
-      const data = await fs[method](
-        ...request.arguments
-      )
-
-      app.ports.wnfsResponse.send({
-        tag: request.tag,
-        method: request.method,
-        data: data.root ? null : (data.buffer ? Array.from(data) : data)
-      })
-    })
+    webnativeElm.setup(app, fs)
 
     // Initialise, Pt. 2
     app.ports.initialise.send({
