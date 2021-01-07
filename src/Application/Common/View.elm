@@ -178,7 +178,7 @@ item messages tag attributes idx it =
                 --
                 , E.onBlur (finishedEditingMsg True)
                 , E.onInput (messages.input { index = idx })
-                , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg False ) ]
+                , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg True ) ]
 
                 --
                 , C.bg_transparent
