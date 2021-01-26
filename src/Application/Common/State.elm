@@ -63,8 +63,8 @@ edit config { index } model =
         |> Return.command (Ports.focusOnTextInput ())
 
 
-finishedEditing : Config item -> { index : Int, save : Bool } -> Manager
-finishedEditing config { index, save } model =
+finishedEditing : Config item -> { index : Int } -> Manager
+finishedEditing config { index } model =
     model
         |> config.getter
         |> List.indexedFoldr
@@ -81,7 +81,12 @@ finishedEditing config { index, save } model =
                                 String.trim i.label
 
                             item =
-                                { i | isEditing = False, label = label, isNew = False }
+                                { i
+                                    | isEditing = False
+                                    , label = label
+                                    , isNew = False
+                                    , oldLabel = label
+                                }
                         in
                         acc
                             |> (if String.isEmpty label then
@@ -92,8 +97,8 @@ finishedEditing config { index, save } model =
                                )
                             |> (\a ->
                                     ( a
-                                    , if label /= i.oldLabel then
-                                        Just item
+                                    , if i.isEditing && label /= i.oldLabel then
+                                        Just { i | label = label }
 
                                       else
                                         Nothing
@@ -111,15 +116,15 @@ finishedEditing config { index, save } model =
                     |> Return.singleton
                     |> Return.andThen
                         (\newModel ->
-                            case ( save, changedItem ) of
-                                ( True, Just item ) ->
+                            case changedItem of
+                                Just item ->
                                     if item.oldLabel == "" then
                                         config.persist newModel item
 
                                     else
                                         config.move newModel item
 
-                                _ ->
+                                Nothing ->
                                     Return.singleton newModel
                         )
            )

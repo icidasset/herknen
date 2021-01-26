@@ -13,7 +13,9 @@ import Return exposing (return)
 import Route
 import Tag
 import Task
+import Webnative
 import Wnfs
+import Wnfs.Directory as Wnfs
 
 
 
@@ -35,7 +37,7 @@ createIndex =
     , tag = tag CreateIndex
     }
         |> Wnfs.mkdir base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 ensureIndex : Cmd Msg
@@ -44,7 +46,7 @@ ensureIndex =
     , tag = tag EnsureIndex
     }
         |> Wnfs.exists base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 fetch : { label : String } -> Cmd Msg
@@ -53,7 +55,7 @@ fetch { label } =
     , tag = tag Fetch
     }
         |> Wnfs.readUtf8 base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 index : Cmd Msg
@@ -62,7 +64,7 @@ index =
     , tag = tag Index
     }
         |> Wnfs.ls base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 move : Group -> Cmd Msg
@@ -72,7 +74,7 @@ move group =
     , tag = tag Mutation
     }
         |> Wnfs.mv base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 persist : Group -> Cmd Msg
@@ -84,7 +86,7 @@ persist group =
             { path = [ "Lists", group.label ++ ".json" ]
             , tag = tag Mutation
             }
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 remove : Group -> Cmd Msg
@@ -93,14 +95,14 @@ remove group =
     , tag = tag Mutation
     }
         |> Wnfs.rm base
-        |> Ports.wnfsRequest
+        |> Ports.webnativeRequest
 
 
 
 -- 📰
 
 
-manage : Group.Tag -> Wnfs.Artifact -> Manager
+manage : Group.Tag -> Webnative.Artifact -> Manager
 manage t a model =
     case ( t, a ) of
         -----------------------------------------
@@ -110,21 +112,21 @@ manage t a model =
             model
                 |> Return.singleton
                 |> Return.command (Task.attempt (always CreateExampleGroup) (Task.succeed ()))
-                |> Return.command (Ports.wnfsRequest Wnfs.publish)
+                |> Return.command (Ports.webnativeRequest Wnfs.publish)
 
         -----------------------------------------
         -- Ensure Index
         -----------------------------------------
-        ( EnsureIndex, Wnfs.Boolean False ) ->
+        ( EnsureIndex, Webnative.Boolean False ) ->
             return model createIndex
 
-        ( EnsureIndex, Wnfs.Boolean True ) ->
+        ( EnsureIndex, Webnative.Boolean True ) ->
             return model index
 
         -----------------------------------------
         -- Fetch
         -----------------------------------------
-        ( Fetch, Wnfs.Utf8Content json ) ->
+        ( Fetch, Webnative.Utf8Content json ) ->
             -- Got a single Group from WNFS,
             -- decode it and fetch the next one that isn't loaded.
             json
@@ -156,7 +158,7 @@ manage t a model =
         -----------------------------------------
         -- Index
         -----------------------------------------
-        ( Index, Wnfs.DirectoryContent list ) ->
+        ( Index, Webnative.DirectoryContent list ) ->
             -- Got the lists index.
             -- Make a temporary Group for each list we found.
             list
@@ -178,7 +180,7 @@ manage t a model =
         -- Mutation
         -----------------------------------------
         ( Mutation, _ ) ->
-            return model (Ports.wnfsRequest Wnfs.publish)
+            return model (Ports.webnativeRequest Wnfs.publish)
 
         -----------------------------------------
         -- 🦉

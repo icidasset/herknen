@@ -23,7 +23,7 @@ import Unit exposing (Unit)
 type alias Messages msg =
     { complete : { index : Int } -> msg
     , edit : { index : Int } -> msg
-    , finishedEditing : { index : Int, save : Bool } -> msg
+    , finishedEditing : { index : Int } -> msg
     , gestureTarget : { index : Int } -> Pointer.Event -> msg
     , input : { index : Int } -> String -> msg
     , remove : { index : Int } -> msg
@@ -124,8 +124,8 @@ item messages tag attributes idx it =
         editMsg =
             messages.edit { index = idx }
 
-        finishedEditingMsg bool =
-            messages.finishedEditing { index = idx, save = bool }
+        finishedEditingMsg =
+            messages.finishedEditing { index = idx }
     in
     Html.li
         [ (if it.isDone then
@@ -176,9 +176,9 @@ item messages tag attributes idx it =
                 , A.type_ "text"
 
                 --
-                , E.onBlur (finishedEditingMsg True)
+                , E.onBlur finishedEditingMsg
                 , E.onInput (messages.input { index = idx })
-                , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg True ) ]
+                , Keyboard.on Keyboard.Keypress [ ( Enter, finishedEditingMsg ) ]
 
                 --
                 , C.bg_transparent

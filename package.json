@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "tailwindcss": "^2.0.1",
-    "webnative": "^0.21.1",
-    "webnative-elm": "^1.0.0"
+    "webnative": "^0.21.3",
+    "webnative-elm": "^2.0.0"
   }
 }

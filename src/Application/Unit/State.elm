@@ -65,7 +65,7 @@ persistGroupsMomentarily : Manager
 persistGroupsMomentarily model =
     return
         { model | groupsBounce = Bounce.push model.groupsBounce }
-        (Bounce.delay 3000 PersistGroupsIfSteady)
+        (Bounce.delay 1500 PersistGroupsIfSteady)
 
 
 
@@ -92,7 +92,7 @@ edit =
     Common.edit config
 
 
-finishedEditing : { index : Int, save : Bool } -> Manager
+finishedEditing : { index : Int } -> Manager
 finishedEditing =
     Common.finishedEditing config
 

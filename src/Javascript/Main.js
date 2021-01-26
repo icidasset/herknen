@@ -40,31 +40,15 @@ document.body.addEventListener("click", () => {})
 // 🚀
 
 
-let fs
+webnativeElm.setup(app)
 
 
-wn.initialise({ permissions: PERMISSIONS })
-  .then(async state => {
-    const { authenticated } = state
-
-    fs = state.fs
-
-    // Ports
-    app.ports.focusOnTextInput.subscribe(() => {
-      setTimeout(focusOnTextInput, 0)
-      setTimeout(focusOnTextInput, 50)
-      setTimeout(focusOnTextInput, 250)
-      setTimeout(focusOnTextInput, 500)
-    })
-
-    // Webnative ports
-    webnativeElm.setup(app, fs)
-
-    // Initialise, Pt. 2
-    app.ports.initialise.send({
-      authenticated
-    })
-  })
+app.ports.focusOnTextInput.subscribe(() => {
+  setTimeout(focusOnTextInput, 0)
+  setTimeout(focusOnTextInput, 50)
+  setTimeout(focusOnTextInput, 250)
+  setTimeout(focusOnTextInput, 500)
+})
 
 
 

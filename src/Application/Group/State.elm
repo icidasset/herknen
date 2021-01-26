@@ -73,7 +73,7 @@ edit =
     Common.edit config
 
 
-finishedEditing : { index : Int, save : Bool } -> Manager
+finishedEditing : { index : Int } -> Manager
 finishedEditing =
     Common.finishedEditing config
 

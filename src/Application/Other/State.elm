@@ -10,14 +10,14 @@ import Html.Events.Extra.Pointer as Pointer
 import List.Extra as List
 import Ports
 import Radix exposing (..)
-import RemoteData
+import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
 import Route
 import Tag
 import Unit
 import Unit.State
 import Url exposing (Url)
-import Webnative
+import Webnative exposing (Artifact(..), Context(..))
 import Wnfs
 
 
@@ -27,24 +27,45 @@ import Wnfs
 
 authenticate : Manager
 authenticate model =
-    { app = Just appPermissions
-    , fs = Nothing
-    }
-        |> Just
+    permissions
         |> Webnative.redirectToLobby Webnative.CurrentUrl
         |> Ports.webnativeRequest
         |> return model
 
 
 gotWnfsResponse : Webnative.Response -> Manager
-gotWnfsResponse response =
-    case Wnfs.decodeResponse Tag.parse response of
-        Ok ( Tag.Group tag, artifact ) ->
-            Group.Wnfs.manage tag artifact
+gotWnfsResponse response model =
+    case Webnative.decodeResponse Tag.parse response of
+        -----------------------------------------
+        -- 🚀
+        -----------------------------------------
+        Ok ( Webnative, _, Initialisation state ) ->
+            if Webnative.isAuthenticated state then
+                return
+                    { model | groups = Loading }
+                    Group.Wnfs.ensureIndex
 
-        _ ->
+            else
+                Return.singleton { model | groups = NotAsked }
+
+        Ok ( Webnative, _, _ ) ->
+            Return.singleton model
+
+        -----------------------------------------
+        -- 💾
+        -----------------------------------------
+        Ok ( Wnfs, Just (Tag.Group tag), artifact ) ->
+            Group.Wnfs.manage tag artifact model
+
+        Ok ( Wnfs, _, _ ) ->
+            Return.singleton model
+
+        -----------------------------------------
+        -- 🥵
+        -----------------------------------------
+        Err ( maybeContext, errString ) ->
             -- TODO: Error handling
-            Return.singleton
+            Return.singleton model
 
 
 pointerDown : Pointer.Event -> Manager

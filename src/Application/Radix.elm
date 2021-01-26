@@ -40,6 +40,13 @@ appPermissions =
     }
 
 
+permissions : Webnative.Permissions
+permissions =
+    { app = Just appPermissions
+    , fs = Nothing
+    }
+
+
 
 -- 📣
 
@@ -53,7 +60,7 @@ type Msg
     | CreateExampleGroup
     | CreateGroup
     | EditGroup { index : Int }
-    | FinishedEditingGroup { index : Int, save : Bool }
+    | FinishedEditingGroup { index : Int }
     | PersistGroupsIfSteady
     | RemoveGroup { index : Int }
     | StartGroupGesture { index : Int } Pointer.Event
@@ -64,7 +71,7 @@ type Msg
     | CompleteUnit { index : Int }
     | CreateUnit
     | EditUnit { index : Int }
-    | FinishedEditingUnit { index : Int, save : Bool }
+    | FinishedEditingUnit { index : Int }
     | RemoveUnit { index : Int }
     | StartUnitGesture { index : Int } Pointer.Event
     | UpdateUnitLabel { index : Int } String
@@ -72,8 +79,7 @@ type Msg
       -- 🦉
       -----------------------------------------
     | Authenticate
-    | GotWnfsResponse Webnative.Response
-    | Initialise { authenticated : Bool }
+    | GotWebnativeResponse Webnative.Response
     | PointerDown Pointer.Event
     | PointerUp Pointer.Event
     | UrlChanged Url

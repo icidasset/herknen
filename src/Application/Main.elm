@@ -21,6 +21,7 @@ import Route
 import Unit.State as Unit
 import Unit.View as Unit
 import Url exposing (Url)
+import Webnative
 import Welcome.View as Welcome
 
 
@@ -54,18 +55,10 @@ init _ url navKey =
         , route = Route.fromUrl url
         , url = url
         }
-        Cmd.none
-
-
-initPartDeux : { authenticated : Bool } -> Model -> ( Model, Cmd Msg )
-initPartDeux { authenticated } model =
-    if authenticated then
-        return
-            { model | groups = Loading }
-            Group.Wnfs.ensureIndex
-
-    else
-        Return.singleton { model | groups = NotAsked }
+        (permissions
+            |> Webnative.init
+            |> Ports.webnativeRequest
+        )
 
 
 
@@ -77,9 +70,6 @@ update msg =
     case msg of
         Bypass ->
             Return.singleton
-
-        Initialise a ->
-            initPartDeux a
 
         -----------------------------------------
         -- Group
@@ -141,7 +131,7 @@ update msg =
         Authenticate ->
             Other.authenticate
 
-        GotWnfsResponse a ->
+        GotWebnativeResponse a ->
             Other.gotWnfsResponse a
 
         PointerDown a ->
@@ -164,9 +154,7 @@ update msg =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ Ports.initialise Initialise
-        , Ports.wnfsResponse GotWnfsResponse
-        ]
+        [ Ports.webnativeResponse GotWebnativeResponse ]
 
 
 
