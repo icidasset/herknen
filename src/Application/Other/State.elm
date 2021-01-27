@@ -63,7 +63,7 @@ gotWnfsResponse response model =
         -----------------------------------------
         -- 🥵
         -----------------------------------------
-        Err ( maybeContext, errString ) ->
+        Err ( maybeContext, errTyped, errString ) ->
             -- TODO: Error handling
             Return.singleton model
 
