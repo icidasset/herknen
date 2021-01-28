@@ -13,9 +13,7 @@ import Return exposing (return)
 import Route
 import Tag
 import Task
-import Webnative
 import Wnfs
-import Wnfs.Directory as Wnfs
 
 
 
@@ -102,31 +100,38 @@ remove group =
 -- 📰
 
 
-manage : Group.Tag -> Webnative.Artifact -> Manager
+manage : Group.Tag -> Wnfs.Artifact -> Manager
 manage t a model =
     case ( t, a ) of
         -----------------------------------------
         -- Create Index
         -----------------------------------------
         ( CreateIndex, _ ) ->
-            model
-                |> Return.singleton
-                |> Return.command (Task.attempt (always CreateExampleGroup) (Task.succeed ()))
-                |> Return.command (Ports.webnativeRequest Wnfs.publish)
+            [ Task.attempt
+                (always CreateExampleGroup)
+                (Task.succeed ())
+
+            -- Publish
+            , { tag = tag Published }
+                |> Wnfs.publish
+                |> Ports.webnativeRequest
+            ]
+                |> Cmd.batch
+                |> Tuple.pair model
 
         -----------------------------------------
         -- Ensure Index
         -----------------------------------------
-        ( EnsureIndex, Webnative.Boolean False ) ->
+        ( EnsureIndex, Wnfs.Boolean False ) ->
             return model createIndex
 
-        ( EnsureIndex, Webnative.Boolean True ) ->
+        ( EnsureIndex, Wnfs.Boolean True ) ->
             return model index
 
         -----------------------------------------
         -- Fetch
         -----------------------------------------
-        ( Fetch, Webnative.Utf8Content json ) ->
+        ( Fetch, Wnfs.Utf8Content json ) ->
             -- Got a single Group from WNFS,
             -- decode it and fetch the next one that isn't loaded.
             json
@@ -158,7 +163,7 @@ manage t a model =
         -----------------------------------------
         -- Index
         -----------------------------------------
-        ( Index, Webnative.DirectoryContent list ) ->
+        ( Index, Wnfs.DirectoryContent list ) ->
             -- Got the lists index.
             -- Make a temporary Group for each list we found.
             list
@@ -180,7 +185,10 @@ manage t a model =
         -- Mutation
         -----------------------------------------
         ( Mutation, _ ) ->
-            return model (Ports.webnativeRequest Wnfs.publish)
+            { tag = tag Published }
+                |> Wnfs.publish
+                |> Ports.webnativeRequest
+                |> return model
 
         -----------------------------------------
         -- 🦉

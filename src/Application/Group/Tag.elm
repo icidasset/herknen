@@ -13,6 +13,7 @@ type Tag
     | Fetch
     | Index
     | Mutation
+    | Published
 
 
 enum : Enum Tag
@@ -23,4 +24,5 @@ enum =
         , ( "Fetch", Fetch )
         , ( "Index", Index )
         , ( "Mutation", Mutation )
+        , ( "Published", Published )
         ]

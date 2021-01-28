@@ -17,7 +17,7 @@ import Tag
 import Unit
 import Unit.State
 import Url exposing (Url)
-import Webnative exposing (Artifact(..), Context(..))
+import Webnative exposing (Artifact(..), DecodedResponse(..))
 import Wnfs
 
 
@@ -39,7 +39,7 @@ gotWnfsResponse response model =
         -----------------------------------------
         -- 🚀
         -----------------------------------------
-        Ok ( Webnative, _, Initialisation state ) ->
+        Webnative (Initialisation state) ->
             if Webnative.isAuthenticated state then
                 return
                     { model | groups = Loading }
@@ -48,22 +48,23 @@ gotWnfsResponse response model =
             else
                 Return.singleton { model | groups = NotAsked }
 
-        Ok ( Webnative, _, _ ) ->
+        Webnative (NoArtifact _) ->
             Return.singleton model
 
         -----------------------------------------
         -- 💾
         -----------------------------------------
-        Ok ( Wnfs, Just (Tag.Group tag), artifact ) ->
+        Wnfs (Tag.Group tag) artifact ->
             Group.Wnfs.manage tag artifact model
-
-        Ok ( Wnfs, _, _ ) ->
-            Return.singleton model
 
         -----------------------------------------
         -- 🥵
         -----------------------------------------
-        Err ( maybeContext, errTyped, errString ) ->
+        WebnativeError _ ->
+            -- TODO: Error handling
+            Return.singleton model
+
+        WnfsError _ ->
             -- TODO: Error handling
             Return.singleton model
 
