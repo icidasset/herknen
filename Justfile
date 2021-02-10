@@ -1,4 +1,5 @@
 dist := "build"
+workbox_config := "workbox.config.cjs"
 
 
 @default: dev-build
@@ -45,6 +46,11 @@ dist := "build"
 		src/Application/Main.elm
 
 
+@favicons:
+	echo "🚚  Transferring favicons"
+	cp src/Favicons/* {{dist}}/
+
+
 @fonts:
 	echo "🔤  Copying fonts"
 	mkdir -p {{dist}}/fonts/
@@ -62,6 +68,11 @@ dist := "build"
 @javascript:
 	echo "🏗  Compiling javascript"
 	cp src/Javascript/Main.js {{dist}}/index.js
+
+
+@manifests:
+	echo "🚚  Transferring manifests"
+	cp src/Manifests/* {{dist}}/
 
 
 @minify-js:
@@ -90,6 +101,19 @@ dist := "build"
 	cp node_modules/webnative-elm/src/funnel.js {{dist}}/vendor/webnative-elm.js
 
 
+# Service worker
+# ==============
+
+@service-worker:
+	echo "⚙️  Generating service worker"
+	NODE_ENV=development pnpx workbox generateSW {{workbox_config}}
+
+
+@production-service-worker:
+	echo "⚙️  Generating service worker"
+	NODE_ENV=production pnpx workbox generateSW {{workbox_config}}
+
+
 
 # Development
 # ===========
@@ -100,7 +124,12 @@ dist := "build"
 	mkdir -p {{dist}}
 
 
-@dev-build: clean vendor schemas html css-large elm-dev javascript fonts
+@deploy-production: production-build
+	echo "🛳  Deploying to Fission"
+	fission app publish
+
+
+@dev-build: clean vendor schemas html css-large elm-dev javascript fonts favicons manifests service-worker
 
 
 @dev-server:
@@ -113,7 +142,7 @@ dist := "build"
 	pnpm install
 
 
-@production-build: clean vendor schemas html elm-production javascript fonts css-small minify-js
+@production-build: clean vendor schemas html elm-production javascript fonts favicons manifests css-small minify-js production-service-worker
 
 
 @watch:
