@@ -1,7 +1,7 @@
 dependencies:
   tailwindcss: 2.0.1
   webnative: 0.21.3
-  webnative-elm: 4.0.0_webnative@0.21.3
+  webnative-elm: 4.0.0-3_webnative@0.21.3
 devDependencies:
   elm-tailwind-css: 1.1.1_tailwindcss@2.0.1
   esbuild: 0.8.27
@@ -1181,10 +1181,10 @@ packages:
       graceful-fs: 4.2.4
     resolution:
       integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==
-  /keypair/1.0.1:
+  /keypair/1.0.2:
     dev: false
     resolution:
-      integrity: sha1-dgNxknCvtlZO04oiCHoG/Jqk6hs=
+      integrity: sha512-7zRr8fKOWp/N8xfZyZV6WG1CUvKNiNahSDI4vjJnPJD60lHtIg62dpv60yCgcM2PP8QKv4S2UkZl+8MsYmQRpw==
   /keystore-idb/0.14.0:
     dependencies:
       '@ungap/global-this': 0.4.3
@@ -1205,8 +1205,8 @@ packages:
       err-code: 2.0.3
       is-typedarray: 1.0.0
       iso-random-stream: 1.1.1
-      keypair: 1.0.1
-      multibase: 3.1.0
+      keypair: 1.0.2
+      multibase: 3.1.1
       multicodec: 2.1.0
       multihashing-async: 2.0.1
       node-forge: 0.10.0
@@ -1379,7 +1379,7 @@ packages:
       dns-over-http-resolver: 1.2.1
       err-code: 2.0.3
       is-ip: 3.1.0
-      multibase: 3.1.0
+      multibase: 3.1.1
       uint8arrays: 1.1.0
       varint: 5.0.2
     dev: false
@@ -1395,6 +1395,16 @@ packages:
       npm: '>=6.0.0'
     resolution:
       integrity: sha512-Z+pThrpbS7ckQ2DwW5mPiwCGe1a94f8DWi/OxmbyeRednVOyUKmLSE+60kL/WHFYwWnaD1OakXGk3PYI1NkMFw==
+  /multibase/3.1.1:
+    dependencies:
+      '@multiformats/base-x': 4.0.1
+      web-encoding: 1.0.6
+    dev: false
+    engines:
+      node: '>=10.0.0'
+      npm: '>=6.0.0'
+    resolution:
+      integrity: sha512-kkSd8jWGznDNEC2eDwtnvSGlZeTeEt0+oHieNWUhv8rIi8JU3voIUo02HpJBNOtgmtxT2CPwkElub7Y9kz3nrw==
   /multicodec/2.1.0:
     dependencies:
       uint8arrays: 1.1.0
@@ -1415,7 +1425,7 @@ packages:
       integrity: sha512-snU+w6aZy5bTrrqIHW3wkT0MfHmxcpOsaVNJt0NzUnseksbjFDVUZjSmhDMAVOVnIdLMS7xHjo55pKlBIGmC3g==
   /multihashes/3.1.2:
     dependencies:
-      multibase: 3.1.0
+      multibase: 3.1.1
       uint8arrays: 2.0.5
       varint: 6.0.0
     dev: false
@@ -2028,13 +2038,13 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha1-t+PqQkNaTJsnWdmeDyAesZWALuE=
-  /protocol-buffers-schema/3.4.0:
+  /protocol-buffers-schema/3.5.1:
     dev: false
     resolution:
-      integrity: sha512-G/2kcamPF2S49W5yaMGdIpkG6+5wZF0fzBteLKgEHjbNzqjZQ85aAs1iJGto31EJaSTkNvHs5IXuHSaTLWBAiA==
+      integrity: sha512-YVCvdhxWNDP8/nJDyXLuM+UFsuPk4+1PB7WGPVDzm3HTHbzFLxQYeW2iZpS4mmnXrQJGBzt230t/BbEb7PrQaw==
   /protons/2.0.0:
     dependencies:
-      protocol-buffers-schema: 3.4.0
+      protocol-buffers-schema: 3.5.1
       signed-varint: 2.0.1
       uint8arrays: 1.1.0
       varint: 5.0.2
@@ -2400,14 +2410,14 @@ packages:
       integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
   /uint8arrays/1.1.0:
     dependencies:
-      multibase: 3.1.0
+      multibase: 3.1.1
       web-encoding: 1.0.6
     dev: false
     resolution:
       integrity: sha512-cLdlZ6jnFczsKf5IH1gPHTtcHtPGho5r4CvctohmQjw8K7Q3gFdfIGHxSTdTaCKrL4w09SsPRJTqRS0drYeszA==
   /uint8arrays/2.0.5:
     dependencies:
-      multibase: 3.1.0
+      multibase: 3.1.1
       web-encoding: 1.0.6
     dev: false
     resolution:
@@ -2480,14 +2490,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-26wEnRPEFAc5d5lmH1Q/DuvWEYsRF1D2alX2jlKpdmqv7cj+BbANL7Xlcl9r4s72Eg9kItZa9RWVbBMC9dMv4w==
-  /webnative-elm/4.0.0_webnative@0.21.3:
+  /webnative-elm/4.0.0-3_webnative@0.21.3:
     dependencies:
       webnative: 0.21.3
     dev: false
     peerDependencies:
       webnative: '> 0.0.0'
     resolution:
-      integrity: sha512-zmHgikud1A6VUpHVqhyzsV7/gwiWLLXh9pGygDeaMU/WgIl4yWiWLDr19w3iHGiCvkT1h1WXRJSyJB27/5M2gA==
+      integrity: sha512-74y9J2Vj1XEO078GAJEohqroJmJQMyZDbB8MouHEpscLiTxlOstgqlW5JyHNSQ9y2LAVv9Il/lG48QtI4a6LVg==
   /webnative/0.21.3:
     dependencies:
       base58-universal: 1.0.0
@@ -2562,4 +2572,4 @@ specifiers:
   esbuild: ^0.8.27
   tailwindcss: ^2.0.1
   webnative: ^0.21.3
-  webnative-elm: ^4.0.0
+  webnative-elm: 4.0.0-3

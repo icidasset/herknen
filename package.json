@@ -11,6 +11,6 @@
   "dependencies": {
     "tailwindcss": "^2.0.1",
     "webnative": "^0.21.3",
-    "webnative-elm": "^4.0.0"
+    "webnative-elm": "4.0.0-3"
   }
 }

@@ -18,7 +18,14 @@ import Url
 index : List Group -> Html Msg
 index groups =
     Common.index
-        [ listView groups
+        [ Common.title
+            { href = ""
+            , title = "Herknen"
+            , tooltip = ""
+            }
+
+        --
+        , listView groups
 
         --
         , if List.isEmpty groups then

@@ -19,36 +19,11 @@ import Unit exposing (Unit)
 index : Group -> Html Msg
 index group =
     Common.index
-        [ Html.a
-            [ A.href "#/"
-            , A.title "Select another list"
-
-            --
-            , C.text_gray_400
-            , C.transition_colors
-
-            --
-            , C.focus__outline_none
-            , C.focus__text_black
-            , C.focus__underline
-            , C.dark__focus__text_white
-            ]
-            [ Html.h1
-                [ C.antialiased
-                , C.font_bold
-                , C.font_display
-                , C.pb_6
-                , C.pt_8
-                , C.px_5
-                , C.text_xl
-                , C.tracking_tighter
-
-                -- Responsive
-                -------------
-                , C.sm__mt_0
-                ]
-                [ Html.text group.label ]
-            ]
+        [ Common.title
+            { href = "#/"
+            , title = group.label
+            , tooltip = "Select another list"
+            }
 
         --
         , listView group.units

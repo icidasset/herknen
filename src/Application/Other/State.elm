@@ -1,6 +1,7 @@
 module Other.State exposing (..)
 
 import Browser exposing (UrlRequest(..))
+import Browser.Dom
 import Browser.Navigation as Nav
 import Common.Item
 import Group
@@ -12,8 +13,9 @@ import Ports
 import Radix exposing (..)
 import RemoteData exposing (RemoteData(..))
 import Return exposing (return)
-import Route
+import Route exposing (Route)
 import Tag
+import Task
 import Unit
 import Unit.State
 import Url exposing (Url)
@@ -233,10 +235,10 @@ urlChanged url model =
                         { label = label }
                         maybeGroup
             in
-            Return.singleton { model | route = route }
+            changeRoute route model
 
         route ->
-            Return.singleton { model | route = route }
+            changeRoute route model
 
 
 urlRequested : UrlRequest -> Manager
@@ -251,3 +253,17 @@ urlRequested urlRequest model =
             ( model
             , Nav.load url
             )
+
+
+
+-- ㊙️
+
+
+changeRoute : Route -> Manager
+changeRoute route model =
+    return
+        { model | route = route }
+        (Task.attempt
+            (\_ -> Bypass)
+            (Browser.Dom.blur "title")
+        )
