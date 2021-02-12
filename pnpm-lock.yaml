@@ -1,7 +1,7 @@
 dependencies:
   tailwindcss: 2.0.1
-  webnative: 0.21.3
-  webnative-elm: 4.0.0-3_webnative@0.21.3
+  webnative: 0.21.4
+  webnative-elm: 4.0.0-3_webnative@0.21.4
   workbox-cli: 6.1.0
 devDependencies:
   elm-tailwind-css: 1.1.1_tailwindcss@2.0.1
@@ -1597,10 +1597,10 @@ packages:
       integrity: sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
   /cids/1.1.5:
     dependencies:
-      multibase: 3.1.0
+      multibase: 3.1.1
       multicodec: 2.1.0
-      multihashes: 3.1.0
-      uint8arrays: 2.0.5
+      multihashes: 3.1.2
+      uint8arrays: 2.1.2
     dev: false
     engines:
       node: '>=4.0.0'
@@ -2815,7 +2815,7 @@ packages:
       cids: 1.1.5
       class-is: 1.1.0
       multicodec: 2.1.0
-      multihashing-async: 2.0.1
+      multihashing-async: 2.1.0
       protons: 2.0.0
       reset: 0.1.0
       run: 1.4.0
@@ -3595,16 +3595,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-r13IzW8+Sv9zab9Gt8RPMIN2WkptIPq99EpAzg4IbJ/zTELhiEwXWr9bAmEatSCI4j/LSA6ESJzvz95JZ+ZYXQ==
-  /multibase/3.1.0:
-    dependencies:
-      '@multiformats/base-x': 4.0.1
-      web-encoding: 1.0.6
-    dev: false
-    engines:
-      node: '>=10.0.0'
-      npm: '>=6.0.0'
-    resolution:
-      integrity: sha512-Z+pThrpbS7ckQ2DwW5mPiwCGe1a94f8DWi/OxmbyeRednVOyUKmLSE+60kL/WHFYwWnaD1OakXGk3PYI1NkMFw==
   /multibase/3.1.1:
     dependencies:
       '@multiformats/base-x': 4.0.1
@@ -3622,17 +3612,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7AYpK/avswOWvnqQ9/jOkQCS7Fp4aKxw5ojvn5gyK2VQTZz3YVXeLMzoIZDBy745JSfJMXkTS0ptnHci5Mt1mA==
-  /multihashes/3.1.0:
-    dependencies:
-      multibase: 3.1.0
-      uint8arrays: 1.1.0
-      varint: 6.0.0
-    dev: false
-    engines:
-      node: '>=10.0.0'
-      npm: '>=6.0.0'
-    resolution:
-      integrity: sha512-snU+w6aZy5bTrrqIHW3wkT0MfHmxcpOsaVNJt0NzUnseksbjFDVUZjSmhDMAVOVnIdLMS7xHjo55pKlBIGmC3g==
   /multihashes/3.1.2:
     dependencies:
       multibase: 3.1.1
@@ -3644,20 +3623,6 @@ packages:
       npm: '>=6.0.0'
     resolution:
       integrity: sha512-AP4IoV/YzkNrfbQKZE3OMPibrmy350OmCd6cJkwyM8oExaXIlOY4UnOOVSQtAEuq/LR01XfXKCESidzZvSwHCQ==
-  /multihashing-async/2.0.1:
-    dependencies:
-      blakejs: 1.1.0
-      err-code: 2.0.3
-      js-sha3: 0.8.0
-      multihashes: 3.1.2
-      murmurhash3js-revisited: 3.0.0
-      uint8arrays: 1.1.0
-    dev: false
-    engines:
-      node: '>=10.0.0'
-      npm: '>=6.0.0'
-    resolution:
-      integrity: sha512-LZcH8PqW4iEKymaJ3RpsgpSJhXF29kAvO02ccqbysiXkQhZpVce8rrg+vzRKWO89hhyIBnQHI2e/ZoRVxmiJ2Q==
   /multihashing-async/2.1.0:
     dependencies:
       blakejs: 1.1.0
@@ -5325,13 +5290,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-cLdlZ6jnFczsKf5IH1gPHTtcHtPGho5r4CvctohmQjw8K7Q3gFdfIGHxSTdTaCKrL4w09SsPRJTqRS0drYeszA==
-  /uint8arrays/2.0.5:
-    dependencies:
-      multibase: 3.1.1
-      web-encoding: 1.0.6
-    dev: false
-    resolution:
-      integrity: sha512-1HSktgwqtYIwVn1mg3GcnqKhHH9oC4kVgdD/43cxMWwhP8rihKcFPmToDzS1XtbvVvlR8XxTk/DUBf0C83qNIg==
   /uint8arrays/2.1.2:
     dependencies:
       multibase: 3.1.1
@@ -5516,15 +5474,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-  /webnative-elm/4.0.0-3_webnative@0.21.3:
+  /webnative-elm/4.0.0-3_webnative@0.21.4:
     dependencies:
-      webnative: 0.21.3
+      webnative: 0.21.4
     dev: false
     peerDependencies:
       webnative: '> 0.0.0'
     resolution:
       integrity: sha512-74y9J2Vj1XEO078GAJEohqroJmJQMyZDbB8MouHEpscLiTxlOstgqlW5JyHNSQ9y2LAVv9Il/lG48QtI4a6LVg==
-  /webnative/0.21.3:
+  /webnative/0.21.4:
     dependencies:
       base58-universal: 1.0.0
       borc: 2.1.2
@@ -5542,7 +5500,7 @@ packages:
     engines:
       node: '>=10.21.0'
     resolution:
-      integrity: sha512-kaVLPVoQEnB4/ERoBWkwgk7JGG/lFLNDizSDDxXMsZx/tYVa3xHFQBw61XU9BDgLyfpAanxH3ZCdncIiO8kvgA==
+      integrity: sha512-4fozhQN5QboZRV+lzx5muLuQyeEsjeyrs3XH+cQhlon2wl2M2d5DgcZlyyaTUv9CBckoyNbVRtlUrMo2dw5OqA==
   /whatwg-url/7.1.0:
     dependencies:
       lodash.sortby: 4.7.0
@@ -5798,6 +5756,6 @@ specifiers:
   elm-tailwind-css: ^1.1.1
   esbuild: ^0.8.27
   tailwindcss: ^2.0.1
-  webnative: ^0.21.3
+  webnative: ^0.21.4
   webnative-elm: 4.0.0-3
   workbox-cli: ^6.1.0
