@@ -1,7 +1,7 @@
 dependencies:
   tailwindcss: 2.0.1
-  webnative: 0.21.4
-  webnative-elm: 4.0.0-3_webnative@0.21.4
+  webnative: 0.23.0
+  webnative-elm: 4.0.0-3_webnative@0.23.0
   workbox-cli: 6.1.0
 devDependencies:
   elm-tailwind-css: 1.1.1_tailwindcss@2.0.1
@@ -5474,15 +5474,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-  /webnative-elm/4.0.0-3_webnative@0.21.4:
+  /webnative-elm/4.0.0-3_webnative@0.23.0:
     dependencies:
-      webnative: 0.21.4
+      webnative: 0.23.0
     dev: false
     peerDependencies:
       webnative: '> 0.0.0'
     resolution:
       integrity: sha512-74y9J2Vj1XEO078GAJEohqroJmJQMyZDbB8MouHEpscLiTxlOstgqlW5JyHNSQ9y2LAVv9Il/lG48QtI4a6LVg==
-  /webnative/0.21.4:
+  /webnative/0.23.0:
     dependencies:
       base58-universal: 1.0.0
       borc: 2.1.2
@@ -5500,7 +5500,7 @@ packages:
     engines:
       node: '>=10.21.0'
     resolution:
-      integrity: sha512-4fozhQN5QboZRV+lzx5muLuQyeEsjeyrs3XH+cQhlon2wl2M2d5DgcZlyyaTUv9CBckoyNbVRtlUrMo2dw5OqA==
+      integrity: sha512-sQkqUcs4sEyWpypIpIt/5TXnarvK0ma9crwlto7Ln+e6DZtX16G5wlA6n5GVJQaLx2SHDeGvCWpgjVW6VT+EcQ==
   /whatwg-url/7.1.0:
     dependencies:
       lodash.sortby: 4.7.0
@@ -5756,6 +5756,6 @@ specifiers:
   elm-tailwind-css: ^1.1.1
   esbuild: ^0.8.27
   tailwindcss: ^2.0.1
-  webnative: ^0.21.4
+  webnative: ^0.23.0
   webnative-elm: 4.0.0-3
   workbox-cli: ^6.1.0

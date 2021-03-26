@@ -12,6 +12,7 @@ workbox_config := "workbox.config.cjs"
 
 @css-large:
 	echo "💄  Compiling CSS"
+	mkdir -p src/Generated/Css
 	pnpx etc src/Css/Application.css \
 		--config src/Css/Tailwind.js \
 		--elm-module Css.Classes \
@@ -21,6 +22,7 @@ workbox_config := "workbox.config.cjs"
 
 @css-small:
 	echo "💄  Minifying CSS"
+	mkdir -p src/Generated/Css
 	NODE_ENV=production pnpx etc src/Css/Application.css \
 		--config src/Css/Tailwind.js \
 		--output {{dist}}/application.css \
@@ -97,7 +99,7 @@ workbox_config := "workbox.config.cjs"
 @vendor:
 	echo "🏗  Copying vendor javascript"
 	mkdir {{dist}}/vendor
-	cp node_modules/webnative/index.umd.js {{dist}}/vendor/webnative.js
+	cp node_modules/webnative/dist/index.umd.js {{dist}}/vendor/webnative.js
 	cp node_modules/webnative-elm/src/funnel.js {{dist}}/vendor/webnative-elm.js
 
 

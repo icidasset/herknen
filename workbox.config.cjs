@@ -1,5 +1,4 @@
 module.exports = {
-  cacheId: "icidasset/herknen",
   clientsClaim: true,
   globDirectory: "build/",
   globPatterns: [ "**/*" ],

@@ -62,13 +62,11 @@ gotWnfsResponse response model =
         -----------------------------------------
         -- 🥵
         -----------------------------------------
-        WebnativeError _ ->
-            -- TODO: Error handling
-            Return.singleton model
+        WebnativeError err ->
+            Return.singleton { model | route = Route.Error (Webnative.error err) }
 
-        WnfsError _ ->
-            -- TODO: Error handling
-            Return.singleton model
+        WnfsError err ->
+            Return.singleton { model | route = Route.Error (Wnfs.error err) }
 
 
 pointerDown : Pointer.Event -> Manager

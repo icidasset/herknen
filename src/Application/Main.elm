@@ -211,6 +211,10 @@ container model =
                     Route.Group { label } _ ->
                         Loaders.puff 32 "currentColor"
 
+                    --
+                    Route.Error err ->
+                        Html.text err
+
                     Route.NotFound ->
                         -- TODO: Proper 404 page
                         Html.text "404"

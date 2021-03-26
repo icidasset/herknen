@@ -13,6 +13,8 @@ import Url.Parser exposing (..)
 type Route
     = Index
     | Group { label : String } (Maybe { index : Int, group : Group })
+      --
+    | Error String
     | NotFound
 
 
