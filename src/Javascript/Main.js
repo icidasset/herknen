@@ -57,7 +57,7 @@ app.ports.focusOnTextInput.subscribe(() => {
 
 function focusOnTextInput() {
   const element = document.querySelector("input[type=\"text\"]")
-  if (element) element.focus()
+  if (element && document.activeElement != element) element.focus()
 }
 
 
