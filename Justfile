@@ -99,7 +99,7 @@ workbox_config := "workbox.config.cjs"
 @vendor:
 	echo "🏗  Copying vendor javascript"
 	mkdir {{dist}}/vendor
-	cp node_modules/webnative/dist/index.umd.js {{dist}}/vendor/webnative.js
+	cp node_modules/webnative/dist/index.umd.min.js {{dist}}/vendor/webnative.js
 	cp node_modules/webnative-elm/src/funnel.js {{dist}}/vendor/webnative-elm.js
 
 
