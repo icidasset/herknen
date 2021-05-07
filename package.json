@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "tailwindcss": "^2.0.1",
-    "webnative": "^0.23.2",
-    "webnative-elm": "5.0.0",
+    "webnative": "^0.24.0",
+    "webnative-elm": "6.0.0",
     "workbox-cli": "^6.1.0"
   }
 }

@@ -40,7 +40,10 @@ document.body.addEventListener("click", () => {})
 // 🚀
 
 
-webnativeElm.setup(app)
+webnativeElm.setup({
+  app: app,
+  webnative: webnative
+})
 
 
 app.ports.focusOnTextInput.subscribe(() => {

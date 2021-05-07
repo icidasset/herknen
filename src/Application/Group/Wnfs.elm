@@ -13,6 +13,7 @@ import Return exposing (return)
 import Route
 import Tag
 import Task
+import Webnative.Path as Path
 import Wnfs
 
 
@@ -31,7 +32,7 @@ base =
 
 createIndex : Cmd Msg
 createIndex =
-    { path = [ "Lists" ]
+    { path = Path.directory [ "Lists" ]
     , tag = tag CreateIndex
     }
         |> Wnfs.mkdir base
@@ -40,7 +41,7 @@ createIndex =
 
 ensureIndex : Cmd Msg
 ensureIndex =
-    { path = [ "Lists" ]
+    { path = Path.directory [ "Lists" ]
     , tag = tag EnsureIndex
     }
         |> Wnfs.exists base
@@ -49,7 +50,7 @@ ensureIndex =
 
 fetch : { label : String } -> Cmd Msg
 fetch { label } =
-    { path = [ "Lists", label ++ ".json" ]
+    { path = Path.file [ "Lists", label ++ ".json" ]
     , tag = tag Fetch
     }
         |> Wnfs.readUtf8 base
@@ -58,7 +59,7 @@ fetch { label } =
 
 index : Cmd Msg
 index =
-    { path = [ "Lists" ]
+    { path = Path.directory [ "Lists" ]
     , tag = tag Index
     }
         |> Wnfs.ls base
@@ -67,8 +68,8 @@ index =
 
 move : Group -> Cmd Msg
 move group =
-    { from = [ "Lists", group.oldLabel ++ ".json" ]
-    , to = [ "Lists", group.label ++ ".json" ]
+    { from = Path.file [ "Lists", group.oldLabel ++ ".json" ]
+    , to = Path.file [ "Lists", group.label ++ ".json" ]
     , tag = tag Mutation
     }
         |> Wnfs.mv base
@@ -81,7 +82,7 @@ persist group =
         |> Group.encode
         |> Json.Encode.encode 0
         |> Wnfs.writeUtf8 base
-            { path = [ "Lists", group.label ++ ".json" ]
+            { path = Path.file [ "Lists", group.label ++ ".json" ]
             , tag = tag Mutation
             }
         |> Ports.webnativeRequest
@@ -89,7 +90,7 @@ persist group =
 
 remove : Group -> Cmd Msg
 remove group =
-    { path = [ "Lists", group.label ++ ".json" ]
+    { path = Path.file [ "Lists", group.label ++ ".json" ]
     , tag = tag Mutation
     }
         |> Wnfs.rm base
@@ -169,7 +170,7 @@ manage t a model =
             list
                 |> List.filterMap
                     (\{ kind, name } ->
-                        if kind == Wnfs.File && String.endsWith ".json" name then
+                        if kind == Path.File && String.endsWith ".json" name then
                             name
                                 |> String.dropRight 5
                                 |> Group.temporary
