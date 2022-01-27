@@ -194,7 +194,17 @@ container model =
                 Welcome.view
 
             Loading ->
-                Loaders.puff 32 "currentColor"
+                case model.route of
+                    Route.Error err ->
+                        -- TODO
+                        Html.text err
+
+                    Route.NotFound ->
+                        -- TODO: Proper 404 page
+                        Html.text "404"
+
+                    _ ->
+                        Loaders.puff 32 "currentColor"
 
             Failure e ->
                 -- TODO
@@ -213,6 +223,7 @@ container model =
 
                     --
                     Route.Error err ->
+                        -- TODO
                         Html.text err
 
                     Route.NotFound ->
